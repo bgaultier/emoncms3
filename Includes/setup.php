@@ -65,6 +65,21 @@
     userid int,
     content text
   )");
-
+  
+  db_query(
+  "CREATE TABLE devices
+  (
+    id int NOT NULL AUTO_INCREMENT,
+    hostname varchar(255) NOT NULL,
+    x float NOT NULL,
+    y float NOT NULL,
+    userid int DEFAULT NULL,
+    comments text,
+    ipv4_addr char(15) DEFAULT NULL,
+    ipv6_addr char(39) DEFAULT NULL,
+    type varchar(255) NOT NULL,
+    feedid int DEFAULT NULL,
+    group int NOT NULL DEFAULT '1'
+  )");
 
 ?>
