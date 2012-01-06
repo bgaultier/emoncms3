@@ -14,6 +14,9 @@
 <script type="text/javascript" src="<?php print $path; ?>Vis/flot/jquery.js"></script>
 <script type="text/javascript" src="<?php print $path; ?>Vis/flot/jquery.flot.js"></script>
 <script type="text/javascript" src="<?php print $path; ?>Vis/Dashboard/widgets/dial.js"></script>
+<script type="text/javascript" src="<?php print $path; ?>Vis/d3/d3.js?2.7.1"></script>
+<script type="text/javascript" src="<?php print $path; ?>Vis/d3/d3.layout.js?2.7.1"></script>
+<script type="text/javascript" src="<?php print $path; ?>Vis/d3/d3.geom.js?2.7.1"></script>
 
 <!------------------------------------------------------------------------------------------
   Dashboard HTML
@@ -119,6 +122,7 @@ $(function() {
             }
 
             draw_graphs();
+            draw_maps();
   
             // Calls specific page javascript update function for any in page javascript
             if(typeof page_js_update == 'function') { page_js_update(assoc); }
@@ -169,6 +173,60 @@ $(function() {
                 draw_gauge(ctx,200/2,100,80,val*scale,maxval,units); firstdraw = 0;
               }
             });
+  }
+  
+  
+  function draw_maps()
+  {
+  	$('.map').each(function(index)
+  	{
+  		if (!$(this).html()) // Only calling this the first time
+  		{	
+  			var w = 541,
+			h = 524,
+			fill = d3.scale.category20();
+
+			var vis = d3.select(".map").append("svg")
+				.attr("width", w)
+				.attr("height", h);
+		
+			vis.append("image")
+					.attr("width", w)
+					.attr("height", h)
+					.attr("xlink:href", path+"Views/theme/dark/campus.svg");
+
+			d3.json(path+"device/list.json", function(json) {
+			  var force = d3.layout.force()
+				  .nodes(json.nodes)
+				  .links(json.links)
+				  .size([w, h])
+				  .start();
+
+			  var link = vis.selectAll("line.link")
+				  .data(json.links)
+				.enter().append("line")
+				  .attr("class", "link")
+				  .style("stroke-width", function(d) { return Math.sqrt(d.value); })
+				  .attr("x1", function(d) { return d.source.x * 5.6; })
+				  .attr("y1", function(d) { return d.source.y * 5.6; })
+				  .attr("x2", function(d) { return d.target.x * 5.6; })
+				  .attr("y2", function(d) { return d.target.y * 5.6; });
+
+			  var node = vis.selectAll("circle.node")
+				  .data(json.nodes)
+				.enter().append("circle")
+				  .attr("class", "node")
+				  .attr("cx", function(d) { return d.x*5.6; })
+				  .attr("cy", function(d) { return d.y*5.6; })
+				  .attr("r", 5)
+				  .style("fill", function(d) { return fill(d.group); });
+
+			  node.append("title")
+				  .text(function(d) { return d.hostname; });
+			});
+
+  		}
+  	});
   }
 
   function draw_graphs()

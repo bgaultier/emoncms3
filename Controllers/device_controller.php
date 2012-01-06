@@ -27,8 +27,7 @@
     {
       $devices = get_user_devices($_SESSION['userid']);
       $feeds = get_user_feeds($_SESSION['userid']);
-    
-      if ($format == 'json') $output = json_encode($devices);
+      if ($format == 'json') $output = "{\"nodes\":" . json_encode($devices) . ",\"links\":[{\"source\":0,\"target\":1,\"value\":1}]}";
       if ($format == 'html') $output = view("device/list_view.php", array('devices' => $devices, 'feeds' => $feeds));
     }
     
