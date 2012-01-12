@@ -8,20 +8,65 @@
     Part of the OpenEnergyMonitor project:
     http://openenergymonitor.org
   */
-  function add_device($hostname,$x,$y,$userid,$comments,$ipv4_addr,$ipv6_addr,$type,$feedid,$group)
+  
+  //id 	hostname 	x 	y 	userid 	comments 	ipv4_addr 	ipv6_addr 	typeid
+  function add_device($hostname, $x, $y, $userid, $comments, $ipv4_addr, $ipv6_addr, $typeid)
   {
-  	$result = db_query("INSERT INTO devices (id, hostname, x, y, userid, comments, ipv4_addr, ipv6_addr,`type`, feedid, `group`) VALUES (NULL, '$hostname', '$x', '$y', '$userid', '$comments', '$ipv4_addr', '$ipv6_addr', '$type', NULL, '$group')");
+  	$result = db_query("INSERT INTO devices (id, hostname, x, y, userid, comments, ipv4_addr, ipv6_addr, typeid) VALUES (NULL, '$hostname', '$x', '$y', '$userid', '$comments', '$ipv4_addr', '$ipv6_addr', '$typeid')");
     return $result;
+  }
+  
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Gets a type string from it's typeid
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+  function get_type($typeid)
+  {
+    $result = db_query("SELECT * FROM device_type WHERE typeid='$typeid' LIMIT 1");
+    while ($row = db_fetch_array($result))
+    {
+      $type = $row['type'];
+      return $type;
+    }
+    return 0;
+  }
+  
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Gets a typeid from it's type string
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+  function get_typeid($type)
+  {
+    $result = db_query("SELECT * FROM device_type WHERE type='$type' LIMIT 1");
+    while ($row = db_fetch_array($result))
+    {
+      $typeid = $row['typeid'];
+      return $typeid;
+    }
+    return 0;
+  }
+  
+  function get_all_types()
+  {
+        $result = db_query("SELECT * FROM device_type");
+        $types = array();
+        if ($result)
+        {
+          while ($row = db_fetch_array($result))
+          {
+          	$type = array('typeid' => $row['typeid'], 'type' => $row['type']);
+          	$types[] = $type;
+          }
+        }
+        return $types;
   }
 
   //-----------------------------------------------------------------------------------------------
-  // Gets the device information. Returns json string
+  // Gets the device information.
   //-----------------------------------------------------------------------------------------------
   function get_device_info($deviceid)
   {
   	$result = db_query("SELECT * FROM devices WHERE id = '$deviceid';");
 	$row = db_fetch_array($result);
-	$arr = array('hostname' => $row['hostname'], 'x' => $row['x'], 'y' => $row['y'], 'type' => $row['type'], 'userID' => $row['userid'], 'ipv4' => $row['ipv4_addr'], 'ipv6' => $row['ipv6_addr'],'feedID' => $row['feedid'], 'comments' => $row['comments']);
+	$arr = array('hostname' => $row['hostname'], 'x' => $row['x'], 'y' => $row['y'], 'type' => get_type($row['typeid']), 'userID' => $row['userid'], 'ipv4' => $row['ipv4_addr'], 'ipv6' => $row['ipv6_addr'],'comments' => $row['comments']);
 	return $arr;
   }  
   
@@ -33,7 +78,7 @@
         {
           while ($row = db_fetch_array($result))
           {
-          	$device = array('id' => $row['id'], 'hostname' => $row['hostname'], 'x' => $row['x'], 'y' => $row['y'], 'type' => $row['type'], 'group' => $row['group'], 'userID' => $row['userid'], 'ipv4' => $row['ipv4_addr'], 'ipv6' => $row['ipv6_addr'],'feedID' => $row['feedid'], 'comments' => $row['comments']);
+          	$device = array('id' => $row['id'], 'hostname' => $row['hostname'], 'x' => $row['x'], 'y' => $row['y'], 'type' => get_type($row['typeid']), 'typeid' => $row['typeid'], 'ipv4' => $row['ipv4_addr'], 'ipv6' => $row['ipv6_addr'],'comments' => $row['comments']);
           	$devices[] = $device;
           }
         }
@@ -48,7 +93,7 @@
         {
           while ($row = db_fetch_array($result))
           {
-          	$device = array('id' => $row['id'], 'hostname' => $row['hostname'], 'x' => $row['x'], 'y' => $row['y'], 'type' => $row['type'], 'group' => $row['group'], 'userID' => $row['userid'], 'ipv4' => $row['ipv4_addr'], 'ipv6' => $row['ipv6_addr'],'feedID' => $row['feedid'], 'comments' => $row['comments']);
+          	$device = array('id' => $row['id'], 'userid' => $row['userid'], 'hostname' => $row['hostname'], 'x' => $row['x'], 'y' => $row['y'], 'type' => get_type($row['typeid']), 'typeid' => $row['typeid'], 'ipv4' => $row['ipv4_addr'], 'ipv6' => $row['ipv6_addr'],'comments' => $row['comments']);
           	$devices[] = $device;
           }
         }

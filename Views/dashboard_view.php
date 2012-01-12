@@ -175,7 +175,6 @@ $(function() {
             });
   }
   
-  
   function draw_maps()
   {
   	$('.map').each(function(index)
@@ -219,14 +218,36 @@ $(function() {
 				  .attr("cx", function(d) { return d.x*5.6; })
 				  .attr("cy", function(d) { return d.y*5.6; })
 				  .attr("r", 5)
-				  .style("fill", function(d) { return fill(d.group); });
+				  .style("fill", function(d) { return fill(d.typeid); })
+				  .on("click", function(d) { draw_node_informations(d); });
 
 			  node.append("title")
 				  .text(function(d) { return d.hostname; });
 			});
+			
+			var nodeinfos = d3.select(".nodeinfos");
+			
+			nodeinfos.append("div")
+				.attr("id", "node-infos")
+				.append("div")
+					.attr("class", "title")
+					.html("Node informations");
+					
+			nodeinfos.append("div")
+					.attr("class", "infos")
+					.html("Click on a node for more details");
 
   		}
   	});
+  }
+  
+  function draw_node_informations(node)
+  {
+	  $('.infos').each(function(index)
+	  {
+		  $(this).html('<table><tr><th>Hostname:</td><td id="hostname">' + node.hostname + '</tr><tr><th>Consumption:</td><td id="consumption">Not yet implemented</td></tr><tr><th>IPv4 Address:</td><td id="ipv4">' + node.ipv4 + '</td></tr><tr><th>IPv6 Address:</td><td id="ipv6">' + node.ipv6 + '</td></tr><tr><th style="vertical-align:top">Comments:</td><td id="comments"style="width: 124px; vertical-align:top;">'+ node.comments + '</td></tr></table><h3>Type</h3><img src="' + path + 'Views/theme/dark/' + node.typeid +'.png" alt="Device Type"/>');
+	  });
+	  draw_graphs();
   }
 
   function draw_graphs()

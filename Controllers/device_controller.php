@@ -26,9 +26,11 @@
     if ($action == 'list' && $_SESSION['read'])
     {
       $devices = get_user_devices($_SESSION['userid']);
+      $types = get_all_types();
       $feeds = get_user_feeds($_SESSION['userid']);
+      
       if ($format == 'json') $output = "{\"nodes\":" . json_encode($devices) . ",\"links\":[{\"source\":0,\"target\":1,\"value\":1}]}";
-      if ($format == 'html') $output = view("device/list_view.php", array('devices' => $devices, 'feeds' => $feeds));
+      if ($format == 'html') $output = view("device/list_view.php", array('devices' => $devices, 'types' => $types, 'feeds' => $feeds));
     }
     
     //---------------------------------------------------------------------------------------------------------
@@ -45,24 +47,8 @@
     //---------------------------------------------------------------------------------------------------------
     if ($action == "add" && $_SESSION['write']) // write access required
     {
-      // TODO Improve this crapy code with a new database table 'Type'
-      switch ($_GET["type"])
-      {
-    		case "arduino":
-				$group = 1;
-	  			break;
-	  		case "alix":
-	  			$group = 2;
-	  			break;
-	  		case "tmote sky":
-	  			$group = 3;
-	  			break;
-	  		default:
-	  			$group = 1;
-	  			break;
-	  	}
-	  	$result = add_device($_GET["hostname"],$_GET["margintop"],$_GET["marginleft"],$_SESSION['userid'],$_GET["comments"],$_GET["ipv4addr"],$_GET["ipv6addr"],$_GET["type"],$_GET["feedid"],$group);
-	  	 if ($format == 'html') header("Location: list");	// Return to device list page
+		$result = add_device($_GET["hostname"],$_GET["margintop"],$_GET["marginleft"],$_SESSION['userid'],$_GET["comments"],$_GET["ipv4addr"],$_GET["ipv6addr"],get_typeid($_GET["type"]));
+		if ($format == 'html') header("Location: list");	// Return to device list page
     }
     
     return $output;

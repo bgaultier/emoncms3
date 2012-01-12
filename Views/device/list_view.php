@@ -42,25 +42,13 @@
         <input id=ipv6addr name=ipv6addr type=text placeholder="e.g. 2001:660:7301:d161::4">
       </li>
       <li>
-        <label for=type>Type</label>
-        <select id=type name=type>
-			<option>arduino sensor</option>
-			<option>alix</option>
-			<option>tmote sky</option>
-		</select>
-      </li>
-      <li>
-        <label for=feedid>Feed ID</label>
-        <select id=feedid name=feedid>
-        				<option>None</option>
-        <?php	if ($feeds) { 
-        			$i = 0;
-        			foreach ($feeds as $feed) { ?>
-        				<option><?php echo $feed[0]; ?></option><?php
-        			}
-        		}
-        ?>
-		</select>
+		  <label for=type>Type</label>
+		  <select id=type name=type><?php if ($types) { foreach ($types as $type){ ?>
+		  
+			<option><?php echo $type['type']; ?></option><?php }} else{ ?>
+			<option>No type</option><?php } ?>
+
+		  </select>
       </li>
     </ol>
   </fieldset>
