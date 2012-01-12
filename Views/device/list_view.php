@@ -62,7 +62,7 @@
 <div class='lightbox' style="margin-bottom:20px; margin-left:3%; margin-right:3%;">
   <h3>My devices</h3>
   <?php if ($devices) { ?>
-  <table class='catlist'><tr><th>id</th><th>Hostname</th><th>IPv4 address</th><th>IPv6 address</th><th>Type</th><th>Feed ID</th></tr>
+  <table class='catlist'><tr><th>id</th><th>Hostname</th><th>IPv4 address</th><th>IPv6 address</th><th>Type</th></tr>
   <?php
     foreach ($devices as $device)
     { ?>
@@ -72,7 +72,6 @@
       <td><?php echo $device['ipv4']; ?></td>
       <td><?php echo $device['ipv6']; ?></td>
       <td><?php echo $device['type']; ?></td>
-      <td><?php echo $device['feedID']; ?></td>
       </tr>
     <?php } ?>
     </table>
