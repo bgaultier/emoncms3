@@ -93,7 +93,7 @@
         {
           while ($row = db_fetch_array($result))
           {
-          	$device = array('id' => $row['id'], 'userid' => $row['userid'], 'hostname' => $row['hostname'], 'x' => $row['x'], 'y' => $row['y'], 'type' => get_type($row['typeid']), 'typeid' => $row['typeid'], 'ipv4' => $row['ipv4_addr'], 'ipv6' => $row['ipv6_addr'],'comments' => $row['comments']);
+          	$device = array('id' => $row['id'], 'hostname' => $row['hostname'], 'x' => $row['x'], 'y' => $row['y'], 'type' => get_type($row['typeid']), 'typeid' => $row['typeid'], 'ipv4' => $row['ipv4_addr'], 'ipv6' => $row['ipv6_addr'],'comments' => $row['comments']);
           	$devices[] = $device;
           }
         }
