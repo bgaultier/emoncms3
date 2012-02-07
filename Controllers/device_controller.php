@@ -25,7 +25,7 @@
     //---------------------------------------------------------------------------------------------------------
     if ($action == 'list' && $_SESSION['read'])
     {
-      $devices = get_all_devices();
+      $devices = get_user_devices($_SESSION['userid']);
       $types = get_all_types();
       $feeds = get_user_feeds($_SESSION['userid']);
       
