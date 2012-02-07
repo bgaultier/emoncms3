@@ -9,40 +9,33 @@
     http://openenergymonitor.org
   */
 
-  function user_apikey_session_control()
+  function user_apikey_session_control($apikey_in)
   {
 
-  //----------------------------------------------------
-  // Check for apikey login
-  //----------------------------------------------------
-  if (!$_SESSION['read'])
-  {
-    $api_session = 0;
-    $apikey_in = db_real_escape_string($_GET['apikey']);
+    //----------------------------------------------------
+    // Check for apikey login
+    //----------------------------------------------------
+    $apikey_in = db_real_escape_string($apikey_in);
     $userid = get_apikey_read_user($apikey_in);
     if ($userid!=0) 
     {
       session_regenerate_id(); 
-      $_SESSION['userid'] = $userid;
-      $_SESSION['read'] = 1;
-      $_SESSION['write'] = 0;
-
-      $api_session = 1;    
+      $session['userid'] = $userid;
+      $session['read'] = 1;
+      $session['write'] = 0;   
     }
 
     $userid = get_apikey_write_user($apikey_in);
     if ($userid!=0) 
     {
       session_regenerate_id(); 
-      $_SESSION['userid'] = $userid;
-      $_SESSION['read'] = 1;
-      $_SESSION['write'] = 1;
-
-      $api_session = 1;    
+      $session['userid'] = $userid;
+      $session['read'] = 1;
+      $session['write'] = 1;
+  
     }
-  }
-  //----------------------------------------------------
-  return $api_session;
+    //----------------------------------------------------
+    return $session;
   }
 
 
@@ -106,12 +99,12 @@
   function create_user($username,$password)
   {
     $hash = hash('sha256', $password);
-    $string = md5(uniqid(rand(), true));
+    $string = md5(uniqid(mt_rand(), true));
     $salt = substr($string, 0, 3);
     $hash = hash('sha256', $salt . $hash);
 
-    $apikey_write = md5(uniqid(rand(), true));
-    $apikey_read = md5(uniqid(rand(), true));
+    $apikey_write = md5(uniqid(mt_rand(), true));
+    $apikey_read = md5(uniqid(mt_rand(), true));
 
     db_query("INSERT INTO users ( username, password, salt ,apikey_read, apikey_write ) VALUES ( '$username' , '$hash' , '$salt', '$apikey_read', '$apikey_write' );"); 
   }

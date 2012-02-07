@@ -33,6 +33,9 @@
     $list[10] = array( "update feed @time",	2,		"update_feed_data"	);
     $list[11] = array( "+ input",		1,		"add_input"		);
     $list[12] = array( "/ input" ,		0,		"divide"		);
+    $list[13] = array( "phaseshift" ,		0,		"phaseshift"		);
+    // $list[14] = array( "save_to_input" ,	4,		"save_to_input"		);
+    // $list[15] = array( "+ feed",		3,		"add_feed"		);
 
     return $list;
   }
@@ -72,6 +75,14 @@
   function add_input($id,$time,$value)
   {
     $result = db_query("SELECT value FROM input WHERE id = '$id'");
+    $row = db_fetch_array($result);
+    $value = $value + $row['value'];
+    return $value;
+  }
+
+  function add_feed($id,$time,$value)
+  {
+    $result = db_query("SELECT value FROM feeds WHERE id = '$id'");
     $row = db_fetch_array($result);
     $value = $value + $row['value'];
     return $value;
@@ -274,7 +285,27 @@
     return $value;
   }
   //---------------------------------------------------------------------------------
+  function phaseshift($arg,$time,$value)
+  {
+    $rad = acos($value);
+    $rad = $rad + (($arg/360.0) * (2.0*3.14159265));
+    return cos($rad);
+  }
 
+function save_to_input($arg,$time,$value)
+{
+  $name = $arg;
+  $userid = $_SESSION['userid'];
+
+    $id = get_input_id($userid,$name);				// If input does not exist this return's a zero
+    if ($id==0) {
+      create_input_timevalue($userid,$name,$time,$value);	// Create input if it does not exist
+    } else {			
+      set_input_timevalue($id,$time,$value);			// Set time and value if it does
+    }
+
+  return $value;
+}
 
 ?>
 
