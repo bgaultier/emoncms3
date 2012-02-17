@@ -1,5 +1,3 @@
-
-
 html, body {
 margin:0;
 padding:0;
@@ -68,6 +66,10 @@ height:100%;
   padding:0px;
   }
 
+  .led {
+  padding:0px;
+  }
+
   .stats {
   width:100%;
   height:200px;
@@ -106,7 +108,7 @@ height:100%;
 .top_menu ul li 
 {
   float: left;
-  width: 20%;
+  width: 25%;
 }
 
 .top_menu ul li a {
@@ -302,60 +304,6 @@ table.catlist td {
 table.catlist tr.d0 td {
 	background-color: rgb(240,240,240);
 }
-
 table.catlist tr.d1 td {
 	background-color: rgb(230,230,230);
-}
-
-form#adddevice fieldset {
-  border: none;
-  margin-bottom: 10px;
-}
-
-form#adddevice fieldset:last-of-type {
-  margin-bottom: 0;
-}
-
-form#adddevice ol li {
-  line-height: 30px;
-  list-style: none;
-  padding: 5px 10px;
-  margin-bottom: 2px;
-}
-
-form#adddevice ol li input,
-form#adddevice ol li textarea {
-  border: 1px solid #CCCCCC;
-  border-radius: 4px 4px 4px 4px;
-  box-shadow: 0 1px #FFFFFF;
-  padding: 8px;
-  width: 201px;
-}
-
-form#adddevice ol li input:focus,
-form#adddevice ol li textarea:focus {
-    border-color: rgba(136, 138, 133, 0.75);
-    box-shadow: 0 0 8px rgba(136, 138, 133, 0.5);
-}
-
-form#adddevice label {
-  float: left;
-  font-size: 15px;
-  font-weight: bold; 
-  width: 110px;
-}
-
-form#adddevice input:not([type=submit]):focus,
-form#adddevice textarea:focus {
-  background-color: #eeeeec;
-}
-
-circle.node {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-
-line.link {
-  stroke: #999;
-  stroke-opacity: .6;
 }
