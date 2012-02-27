@@ -14,23 +14,26 @@
   */
   function device_controller()
   {
-    require "Models/device_model.php";
     require "Models/feed_model.php";
-    global $action, $format;
-    
+    require "Models/device_model.php";
+    global $session, $action, $format;
+
+    $output['content'] = "";
+    $output['message'] = "";
+
     //---------------------------------------------------------------------------------------------------------
     // List
     // http://yoursite/emoncms/device/list.html
     // http://yoursite/emoncms/device/list.json
     //---------------------------------------------------------------------------------------------------------
-    if ($action == 'list' && $_SESSION['read'])
+    if ($action == 'list' && $session['read'])
     {
-      $devices = get_user_devices($_SESSION['userid']);
+      $feeds = get_user_feeds($session['userid']);
+      $devices = get_user_devices($session['userid']);
       $types = get_all_types();
-      $feeds = get_user_feeds($_SESSION['userid']);
-      
-      if ($format == 'json') $output = "{\"nodes\":" . json_encode($devices) . ",\"links\":[{\"source\":0,\"target\":1,\"value\":1}]}";
-      if ($format == 'html') $output = view("device/list_view.php", array('devices' => $devices, 'types' => $types, 'feeds' => $feeds));
+    
+      if ($format == 'json') $output['content'] = "{\"nodes\":" . json_encode($devices) . ",\"links\":[{\"source\":0,\"target\":1,\"value\":1}]}";
+      if ($format == 'html') $output['content'] = view("device/list_view.php", array('devices' => $devices, 'types' => $types, 'feeds' => $feeds));
     }
     
     //---------------------------------------------------------------------------------------------------------
@@ -45,16 +48,15 @@
     // type=alix&
     // feedid=2
     //---------------------------------------------------------------------------------------------------------
-    if ($action == "add" && $_SESSION['write']) // write access required
+    if ($action == "add" && $session['write']) // write access required
     {
-		$result = add_device($_GET["hostname"],$_GET["margintop"],$_GET["marginleft"],$_SESSION['userid'],$_GET["comments"],$_GET["ipv4addr"],$_GET["ipv6addr"],get_typeid($_GET["type"]));
+		$result = add_device($_GET["hostname"],$_GET["margintop"],$_GET["marginleft"],$session['userid'],$_GET["comments"],$_GET["ipv4addr"],$_GET["ipv6addr"],get_typeid($_GET["type"]));
 		if ($format == 'html') header("Location: list");	// Return to device list page
     }
     
     return $output;
+    
   }
-  
-  
 ?>
 
 
