@@ -51,12 +51,14 @@
 
   if ($_GET['apikey']) $session = user_apikey_session_control($_GET['apikey']);
 
-  $content = controller($controller);
+  $output = controller($controller);
+  $message = $output['message'];
+  $content = $output['content']; 
 
   if ($format == 'json')
   {
-    print $content;
-    if (!$content) print "Sorry, you need a valid apikey or be logged in to see this page";
+    print $message.$content;
+    if (!($message.$content)) print "Sorry, you need a valid apikey or be logged in to see this page";
   }
 
   if ($format == 'html')
@@ -66,7 +68,7 @@
       $menu = view("menu_view.php", array());
     }
     if (!$session['read']) $content = view("user/login_block.php", array());
-    print view("theme/wp/theme.php", array('menu' => $menu, 'user' => $user, 'content' => $content));
+    print view("theme/dark/theme.php", array('menu' => $menu, 'user' => $user, 'content' => $content,'message' => $message));
   }
   
   //----------------------------------------------------
