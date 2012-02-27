@@ -17,7 +17,7 @@
     <!-- Thanks to Baptiste Gaultier for the emoncms dial icon http://bit.ly/zXgScz -->
     <link rel="shortcut icon" href="<?php print $GLOBALS['path']; ?>Views/theme/dark/favicon.png" />
     <link rel="stylesheet" type="text/css" href="<?php print $GLOBALS['path']; ?>Views/theme/android.css" media="only screen and (min-width: 480px)" />
-    <link rel="stylesheet" type="text/css" href="<?php print $GLOBALS['path']; ?>Views/theme/dark/style.css" />
+    <link rel="stylesheet" type="text/css" href="<?php print $GLOBALS['path']; ?>Views/theme/wp/style.css" />
 
     <!------------------------------------------------------------------
     APPLE TWEAKS - thanks to Paul Dreed
@@ -37,26 +37,18 @@
       HEADER
       ------------------------------------------------------->
       <div class="header">
-        <img id="applogo" style="margin:12px; margin-right:8px; float:left;" src="<?php print $GLOBALS['path']; ?>Views/theme/dark/emoncms logo.png" />
-        <div style="color:#fff; margin-top:10px; float:left; font-size:21px; font-family: Arial,sans-serif;" ><span style="color: #0099ff;">emon</span><span style="color: #b3b3b3;">cms</span></div>
-	<div><?php echo $user; ?></div>
-        <div style='clear:both;'></div>
+		  <ul id="top-menu">
+			  <li><a style="padding:0" href='<?php echo $GLOBALS['path']; ?>dashboard/view'><img id="emoncms-logo" src="<?php print $GLOBALS['path']; ?>Views/theme/wp/emoncms logo.png" /></a></li>
+			  <?php print $menu; ?>
+		  </ul>
+		  <div><?php echo $user; ?></div>
       </div>
-
-      <!------------------------------------------------------
-      TOP MENU
-      ------------------------------------------------------->
-      <div class='top_menu'>
-        <ul>
-        <?php print $menu; ?>
-        </ul>
-        <div style='clear:both;'></div>
-      </div>
+      <div style='clear:both;'></div>
 
       <!------------------------------------------------------
       CONTENT
       ------------------------------------------------------->
-      <div class="content" style="background-color:#fff;">
+      <div class="content" style="padding-top: 28px;">
           <?php print $content; ?>
       </div>
 

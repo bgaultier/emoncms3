@@ -27,7 +27,7 @@
           <div style="width: 960px; margin: 0px auto; padding:0px; text-align:left; margin-bottom:20px; margin-top:20px;">
 
 
-<div style="background-color:#ccc; width:99.0%; padding:5px; border-radius: 3px;">
+<div style="width:99.0%; padding:5px; border-radius: 3px; background-color: #E9E9E9; background-image: -moz-linear-gradient(center bottom , #DDDDDD, #E9E9E9); border: 1px solid #CCCCCC;">
 <textarea rows="20"  id="editarea" style="width:99.4%; border-radius: 2px;"></textarea>
 <button type="button" id="editsave" class="button05" >Save</button>
 <button type="button" id="editclose" class="button05" >Close</button>

@@ -66,7 +66,7 @@
       $menu = view("menu_view.php", array());
     }
     if (!$session['read']) $content = view("user/login_block.php", array());
-    print view("theme/dark/theme.php", array('menu' => $menu, 'user' => $user, 'content' => $content));
+    print view("theme/wp/theme.php", array('menu' => $menu, 'user' => $user, 'content' => $content));
   }
   
   //----------------------------------------------------
