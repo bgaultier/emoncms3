@@ -8,6 +8,11 @@
     http://openenergymonitor.org
 -->
 
+<?php global $path; ?>
+
+<script type="text/javascript" src="<?php print $path; ?>Vis/d3/d3.js?2.7.1"></script>
+<script type="text/javascript" src="<?php print $path; ?>Vis/d3/d3.layout.js?2.7.1"></script>
+<script type="text/javascript" src="<?php print $path; ?>Vis/d3/d3.geom.js?2.7.1"></script>
 
 <div class='lightbox' style="margin-bottom:20px; margin-left:3%; margin-right:3%;">
   <h2>Devices</h2>
@@ -29,6 +34,7 @@
         <label for=marginleft>Margin left (m)</label>
         <input id=marginleft name=marginleft type=number placeholder="e.g. 38.5" required>
       </li>
+      <div class="map" style="margin: 24px; margin-left: 118px; "></div>
       <li>
         <label for=comments>Comments</label>
         <textarea id=comments name=comments rows=4 placeholder="Comments about the device"></textarea>
@@ -80,5 +86,50 @@
     <?php } ?>
 </div>
 
+<script type="application/javascript">
 
+var w = 265,
+	h = 256,
+	r = 4,
+	path = "<?php echo $path; ?>";
+	fill = d3.scale.category20();
+	
+var drag = d3.behavior.drag()
+.origin(Object)
+.on("drag", dragmove);
+	
+var vis = d3.select(".map").append("svg")
+.attr("width", w)
+.attr("height", h)
+.attr("class", "widget-container")
+;
+
+vis.append("image")
+.attr("width", w)
+.attr("height", h)
+.attr("xlink:href", path+"Views/theme/dark/campus-small.svg");
+
+var drag = d3.behavior.drag()
+    .origin(Object)
+    .on("drag", dragmove);
+
+var circle = vis.append("circle")
+    .data([{x: w / 2, y: h / 2}])
+    .attr("class", "node")
+    .attr("r", r)
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    .style("fill", function(d) { return fill(1); })
+    .call(drag);
+
+function dragmove(d) {
+  circle
+      .attr("cx", d.x = Math.max(r, Math.min(w - r, d3.event.x)))
+      .attr("cy", d.y = Math.max(r, Math.min(h - r, d3.event.y)));
+      
+  document.getElementById("margintop").value = (d.x/2.8).toFixed(1);
+  document.getElementById("marginleft").value = (d.y/2.8).toFixed(1);
+  
+}
+</script>
 
