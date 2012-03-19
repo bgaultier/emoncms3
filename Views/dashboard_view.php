@@ -186,11 +186,11 @@ $(function() {
   		{	
   			var w = 541,
 			h = 524,
-			fill = d3.scale.category20();
+			fill = d3.scale.category20c();
 
 			var vis = d3.select(".map").append("svg")
 				.attr("width", w)
-				.attr("height", h);
+				.attr("height", h+100);
 		
 			vis.append("image")
 					.attr("width", w)
@@ -226,8 +226,41 @@ $(function() {
 
 			  node.append("title")
 				  .text(function(d) { return d.hostname; });
+				  
+			  /*vis.append("rect")
+			   .attr("width", 250)
+			   .attr("height", 120)
+			   .attr("id","caption")
+			   .style("fill", "#eee")
+			   .attr("y", h+8);*/
+			 
+			  var type = vis.selectAll(".types")
+						    .data(json.types)
+						 .enter();
+						 
+			 type.append("circle")
+				 .attr("class", "node")
+				 .attr("cx", 10+40)
+				 .attr("cy", function(d) { return d.typeid * 15 + h/2 + 8; })
+				 .attr("r", 5)
+				 .style("fill", function(d) { return fill(d.typeid); })
+								 
+								 
+			type.append("text")
+				.text(function(d) { return d.type; })
+				.attr("x", 18+40)
+				.attr("style", "font: 10px sans-serif;")
+				.attr("y", function(d) { return d.typeid * 16 + h/2 + 10; });
+								 
+								 
 			});
 			
+			   /*vis.append("rect")
+			   .attr("width", 250)
+			   .attr("height", 120)
+			   .attr("id","caption")
+			   .style("fill", "#eee")
+			   .attr("y", h+8);*/
 			var nodeinfos = d3.select(".nodeinfos");
 			
 			nodeinfos.append("div")

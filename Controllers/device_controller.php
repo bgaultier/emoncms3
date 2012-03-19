@@ -32,7 +32,7 @@
       $devices = get_user_devices($session['userid']);
       $types = get_all_types();
     
-      if ($format == 'json') $output['content'] = "{\"nodes\":" . json_encode($devices) . ",\"links\":[{\"source\":0,\"target\":1,\"value\":1}]}";
+      if ($format == 'json') $output['content'] = "{\"nodes\":" . json_encode($devices) . ",\"links\":[{\"source\":0,\"target\":1,\"value\":1}]" . ",\"types\":" . json_encode($types) . "}";
       if ($format == 'html') $output['content'] = view("device/list_view.php", array('devices' => $devices, 'types' => $types, 'feeds' => $feeds));
     }
     
