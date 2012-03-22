@@ -43,12 +43,14 @@
 		  </ul>
 		  <div><?php echo $user; ?></div>
       </div>
-      <div style='clear:both;'></div>
-
+      <div style='clear:both; height:28px;'></div>
+      <?php if ($message) { ?>
+      <div id="message"><?php print $message; ?></div>
+      <?php } ?>
       <!------------------------------------------------------
       CONTENT
       ------------------------------------------------------->
-      <div class="content" style="padding-top: 28px;">
+      <div class="content">
           <?php print $content; ?>
       </div>
 
