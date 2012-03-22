@@ -41,7 +41,8 @@
     {
       i++;
       // FEED ID
-      if (feeds[z][2] != lastfeed) {out+= "<tr><td></td></tr>"; }
+      if (feeds[z][2] != lastfeed)
+		out+= "<tr><td></td></tr>";
       lastfeed = feeds[z][2];
 
       out += "<tr class='d"+(i & 1)+"' ><td>"+feeds[z][0]+"</td>";
@@ -49,14 +50,15 @@
       // FEED NAME AND BUTTON
       out += "<td><form action='view' method='get'><input type='hidden' name='id' value='"+feeds[z][0]+"'><input type='submit' value='"+feeds[z][1]+"' class='button05' style='width:150px'/ ></form></td>";
       var now = (new Date()).getTime();
-      var update = (new Date(feeds[z][3])).getTime();
-      var lastupdate = (now-update)/1000;
+      var regex = /^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9]) (?:([0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/;
+      var parts = feeds[z][3].replace(regex,"$1 $2 $3 $4 $5 $6").split(' ');
+      var update = new Date(parts[0],parts[1]-1,parts[2],parts[3],parts[4],parts[5]);
 
       var secs = (now-update)/1000;
       var mins = secs/60;
-      var hour = secs/3600
+      var hour = secs/3600;
 
-      var updated = secs.toFixed(0)+"s ago";
+      var updated = secs.toFixed(0)-10+"s ago";
       if (secs>180) updated = mins.toFixed(0)+" mins ago";
       if (secs>(3600*2)) updated = hour.toFixed(0)+" hours ago";
       if (hour>24) updated = "inactive";
@@ -85,5 +87,4 @@
     }
     });
   }
-
 </script>
