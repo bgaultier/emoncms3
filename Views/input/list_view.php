@@ -42,6 +42,7 @@
 
       // FEED NAME AND BUTTON
       out += "<td><form action='../process/list.html' method='get'><input type='hidden' name='inputid' value='"+inputs[z][0]+"'><input type='submit' value='"+inputs[z][1]+"' class='button05' style='width:150px'/ ></form></td>";
+
       var now = (new Date()).getTime();
       var regex = /^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9]) (?:([0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/;
       var parts = inputs[z][2].replace(regex,"$1 $2 $3 $4 $5 $6").split(' ');
