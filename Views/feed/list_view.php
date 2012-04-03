@@ -53,7 +53,7 @@
       var update = (new Date(feeds[z][3])).getTime();
       var lastupdate = (now-update)/1000;
 
-      var secs = (now-update)/1000;
+      var secs = (now-update)/1000 - 37;
       var mins = secs/60;
       var hour = secs/3600;
 
