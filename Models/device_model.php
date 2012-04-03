@@ -78,11 +78,18 @@
         {
           while ($row = db_fetch_array($result))
           {
-          	$device = array('id' => $row['id'], 'hostname' => $row['hostname'], 'x' => $row['x'], 'y' => $row['y'], 'type' => get_type($row['typeid']), 'typeid' => $row['typeid'], 'ipv4' => $row['ipv4_addr'], 'ipv6' => $row['ipv6_addr'],'comments' => $row['comments']);
+          	$device = array('id' => $row['id'], 'hostname' => $row['hostname'], 'x' => $row['x'], 'y' => $row['y'], 'type' => get_type($row['typeid']), 'typeid' => $row['typeid'], 'ipv4' => $row['ipv4_addr'], 'ipv6' => $row['ipv6_addr'],'comments' => $row['comments'], 'consumption' => device_consumption($row['hostname']));
           	$devices[] = $device;
           }
         }
         return $devices;
+  }
+  
+ function device_consumption($devicename)
+  {
+    $feed_result = db_query("SELECT * FROM feeds WHERE name = '$devicename'");
+    $feed_row = db_fetch_array($feed_result);
+    return $feed_row['value'];
   }
   
   function get_all_devices()
