@@ -57,7 +57,8 @@
     'yesterday'=> array('type'=>'FLOAT'),
     'week'=> array('type'=>'FLOAT'),
     'month'=> array('type'=>'FLOAT'),
-    'year'=> array('type'=>'FLOAT')
+    'year'=> array('type'=>'FLOAT'),
+    'type'=> array('type'=>'int NOT NULL')
   );
 
   $schema['feed_relation'] = array(
@@ -87,9 +88,16 @@
 
   $schema['kwhdproc'] = array(
     'feedid'=> array('type'=>'int'),
+    'time'=> array('type'=>'INT UNSIGNED'),
     'kwh'=> array('type'=>'FLOAT')
   );
 
+  $schema['statistics'] = array(
+    'userid'=> array('type'=>'int'),
+    'uphits'=> array('type'=>'int'),
+    'dnhits'=> array('type'=>'int'),
+    'memory'=> array('type'=>'int')
+  );
 
   $out = "<table style='font-size:12px'><tr><th width='220'></th><th></th></tr>";
 
