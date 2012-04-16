@@ -27,7 +27,7 @@
           <div style="width: 960px; margin: 0px auto; padding:0px; text-align:left; margin-bottom:20px; margin-top:20px;">
 
 
-<div style="width:99.0%; padding:5px; border-radius: 3px; background-color: #E9E9E9; background-image: -moz-linear-gradient(center bottom , #DDDDDD, #E9E9E9); border: 1px solid #CCCCCC;">
+<div style="width:99.0%; padding:5px; border-radius: 3px; background-color: #E9E9E9; background-image: -moz-linear-gradient(center bottom , #DDDDDD, #E9E9E9);   background-image: -webkit-gradient(linear,left top,left bottom,from(#DDDDDD),to(#E9E9E9)); background-image: -webkit-linear-gradient(top ,#DDDDDD,#E9E9E9); border: 1px solid #CCCCCC;">
 <textarea rows="20"  id="editarea" style="width:99.4%; border-radius: 2px;"></textarea>
 <button type="button" id="editsave" class="button05" >Save</button>
 <button type="button" id="editclose" class="button05" >Close</button>
@@ -187,10 +187,116 @@ $(function() {
   			var w = 541,
 			h = 524,
 			fill = d3.scale.category20c();
+			
+			var emoncms_dial_colors = ["#c0e392", "#9dc965", "#87c03f","#70ac21","#378d42","#046b34"];
+			
+			var layers = d3.select(".map")
+						   .append("ul")
+						   .attr("id", "layers")
+						   .html('<li>Layers :</li><li><a id="devicelayer" href="">Device type</a></li><li><a id="powernowlayer" href="#">Power now</a></li><li><a id="energytodaylayer" href="#">Energy today</a></li>');
 
 			var vis = d3.select(".map").append("svg")
 				.attr("width", w)
 				.attr("height", h+100);
+				
+		    var consumption_max = 1500;
+				
+			d3.select(".map ul li #powernowlayer").on("click", function() {
+				vis.selectAll(".caption").transition().remove();
+								
+				var caption = vis.append("g")
+								  .attr("class", "caption")
+								  .attr("width", 20 * emoncms_dial_colors.length +"px");
+								  
+				caption.selectAll("rect")
+					   .data(emoncms_dial_colors)
+					   .enter().append("rect")
+							   .attr("x", function(d, i) { return i * 20+4; })
+							   .attr("y", 524)
+							   .attr("width", 20)
+							   .attr("height", 20)
+							   .style("fill", function(d, i) { return emoncms_dial_colors[i] });
+									
+				caption.append("text")
+					   .attr("x", 0)
+					   .attr("y", 554)
+					   .text("0W")
+					   .attr("style", "font: 10px sans-serif;");
+					  
+					  
+				caption.append("text")
+					   .attr("x", 20 * emoncms_dial_colors.length - 12 +"px")
+					   .attr("y", 554)
+					   .text(consumption_max + "W")
+					   .attr("style", "font: 10px sans-serif;"); 
+									
+				vis.selectAll("circle.node")
+				   .transition()
+				   .style("fill", function(d) {
+					   if(d.consumption)
+					   {
+						   if(d.consumption>=0 && d.consumption < (consumption_max/6))
+								return  emoncms_dial_colors[0];
+						   if(d.consumption>=(consumption_max/6) && d.consumption < (consumption_max/6)*2)
+								return  emoncms_dial_colors[1];
+						   if(d.consumption>=(consumption_max/6)*2 && d.consumption < (consumption_max/6)*3)
+								return  emoncms_dial_colors[2];
+						   if(d.consumption>=(consumption_max/6)*3 && d.consumption < (consumption_max/6)*4)
+								return  emoncms_dial_colors[3];
+						   if(d.consumption>=(consumption_max/6)*4 && d.consumption < (consumption_max/6)*5)
+								return  emoncms_dial_colors[4];
+						   if(d.consumption>=(consumption_max/6)*5)
+								return  emoncms_dial_colors[4];
+					   }
+					   else return "#ccc";
+				   });
+					   
+					   
+			});
+			
+			d3.select(".map ul li #energytodaylayer").on("click", function() {
+				vis.selectAll(".caption").transition().remove();
+				
+				color = d3.interpolateRgb("#aad", "#556");
+				
+				var caption = vis.append("g")
+								 .attr("class", "caption")
+								 .attr("width", "200px");
+								  
+				caption.selectAll("rect")
+					   .data(color)
+					   .enter().append("rect")
+							   .attr("x", function(d, i) { return i*20})
+							   .attr("y", 524)
+							   .attr("width", 20)
+							   .attr("height", 20)
+							   .style("fill", function(d, i) { return color(i/10); });
+									
+				caption.append("text")
+					   .attr("x", 0)
+					   .attr("y", 554)
+					   .text("0kWh")
+					   .attr("style", "font: 10px sans-serif;");
+					  
+					  
+				caption.append("text")
+					   .attr("x", 20 * color.length*10 - 20 +"px")
+					   .attr("y", 554)
+					   .text("0.15kWhd")
+					   .attr("style", "font: 10px sans-serif;"); 
+									
+				vis.selectAll("circle.node")
+				   .transition()
+				   .style("fill", function(d) {
+					   if(d.kwhd)
+					   {
+						   return  color(d.kwhd);
+					   }
+					   else return "#ddd";
+				   });
+					   
+					   
+			});
 		
 			vis.append("image")
 					.attr("width", w)
@@ -227,40 +333,48 @@ $(function() {
 			  node.append("title")
 				  .text(function(d) { return d.hostname; });
 				  
-			  /*vis.append("rect")
-			   .attr("width", 250)
-			   .attr("height", 120)
-			   .attr("id","caption")
-			   .style("fill", "#eee")
-			   .attr("y", h+8);*/
-			 
-			  var type = vis.selectAll(".types")
-						    .data(json.types)
-						 .enter();
+			  draw_caption();
+			  
+			  /** Returns an event handler for fading a given chord group. */
+			  function fade(opacity) {
+				  return function(g, i) {
+					  vis.selectAll("circle.node")
+					     .filter(function(d) {
+							 return d.typeid != i+1;
+							 })
+							 .transition()
+							 .style("opacity", opacity);
+							 };
+			  }
+			  
+			  /** Returns an event handler for fading a given chord group. */
+			  function draw_caption()
+			  {
+				  var type = vis.selectAll(".types")
+								.data(json.types)
+								.enter();
+						
+				  var caption = type.append("g").attr("class", "caption");
+				  
+				  
+				  caption.append("circle")
+						 .attr("class", "node")
+						 .attr("cx", 10+40)
+						 .attr("cy", function(d) { return d.typeid * 15 + h/2 + 8; })
+						 .attr("r", 5)
+						 .style("fill", function(d) { return fill(d.typeid); });
 						 
-			 type.append("circle")
-				 .attr("class", "node")
-				 .attr("cx", 10+40)
-				 .attr("cy", function(d) { return d.typeid * 15 + h/2 + 8; })
-				 .attr("r", 5)
-				 .style("fill", function(d) { return fill(d.typeid); })
-								 
-								 
-			type.append("text")
-				.text(function(d) { return d.type; })
-				.attr("x", 18+40)
-				.attr("style", "font: 10px sans-serif;")
-				.attr("y", function(d) { return d.typeid * 16 + h/2 + 10; });
-								 
-								 
+						 
+				  caption.append("text")
+						 .text(function(d) { return d.type; })
+						 .attr("x", 18+40)
+						 .attr("style", "font: 10px sans-serif;")
+						 .attr("y", function(d) { return d.typeid * 16 + h/2 + 10; })
+						 .on("mouseover", fade(.1))
+						 .on("mouseout", fade(1));
+			  }
 			});
 			
-			   /*vis.append("rect")
-			   .attr("width", 250)
-			   .attr("height", 120)
-			   .attr("id","caption")
-			   .style("fill", "#eee")
-			   .attr("y", h+8);*/
 			var nodeinfos = d3.select(".nodeinfos");
 			
 			nodeinfos.append("div")
@@ -272,19 +386,34 @@ $(function() {
 			nodeinfos.append("div")
 					.attr("class", "infos")
 					.html("Click on a node for more details");
-
   		}
   	});
   }
   
   function draw_node_informations(node)
   {
+	  var out = '<table><tr><th>Hostname:</th><td id="hostname">' + node.hostname + '</tr>';
+	  if(node.consumption)
+		out += '<tr><th>Consumption:</th><td id="consumption">'+ node.consumption +'W</div></td></tr>';
+	  if(node.kwhd)
+		out += '<tr><th>Energy today:</th><td id="kwhd">'+ parseFloat(node.kwhd).toFixed(3) +'kWhd</div></td></tr>';
+	  if(node.ipv4)
+		out += '<tr><th>IPv4 Address:</th><td id="ipv4">' + node.ipv4 + '</td></tr>';
+	  if(node.ipv6)
+		out += '<tr><th>IPv6 Address:</th><td id="ipv6">' + node.ipv6 + '</td></tr>';
+	  if(node.comments)
+		out += '<tr><th style="vertical-align:top">Comments:</th><td id="comments"style="width: 124px; vertical-align:top;">'+ node.comments + '</td></tr>';
+		
+	  out += '</table><h3>Type</h3><img src="' + path + 'Views/theme/dark/' + node.typeid +'.png" alt="Device Type"/>';
+	  
 	  $('.infos').each(function(index)
 	  {
-		  $(this).html('<table><tr><th>Hostname:</td><td id="hostname">' + node.hostname + '</tr><tr><th>Consumption:</td><td id="consumption"><div class="value" style="color: #333333; font-size: 14px; font-weight: normal;"><span class="'+ node.hostname +'"></span>W</div></td></tr><tr><th>IPv4 Address:</td><td id="ipv4">' + node.ipv4 + '</td></tr><tr><th>IPv6 Address:</td><td id="ipv6">' + node.ipv6 + '</td></tr><tr><th style="vertical-align:top">Comments:</td><td id="comments"style="width: 124px; vertical-align:top;">'+ node.comments + '</td></tr></table><h3>Type</h3><img src="' + path + 'Views/theme/dark/' + node.typeid +'.png" alt="Device Type"/>');
+		  $(this).hide().html(out).fadeIn();
 	  });
 	  update();
   }
+  
+  
   
   function draw_leds()
   {
