@@ -78,6 +78,23 @@
       } else $output['message'] = "Feed does not exist";
 
     }
+    
+    //---------------------------------------------------------------------------------------------------------
+    // Diagnosis
+    // http://yoursite/emoncms/feed/diagnosis?id=1
+    //--------------------------------------------------------------------------------------------------------- 
+    if ($action == "diagnosis" && $session['read'])
+    { 
+      $feedid = intval($_GET["id"]);
+      if (feed_belongs_user($feedid, $session['userid'])) {
+		  $diagnosis = get_diagnosis($feedid);
+		  $feed = get_feed($feedid);
+		  
+		  if ($format == 'json') $output['content'] = json_encode($diagnosis);
+		  if ($format == 'html') $output['content'] = view("feed/diagnosis_view.php", array('feed' => $feed, 'diagnosis' => $diagnosis));
+      } else $output['message'] = "Feed does not exist";
+      
+    }
 
 
     //---------------------------------------------------------------------------------------------------------

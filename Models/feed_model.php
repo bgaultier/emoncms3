@@ -430,6 +430,43 @@
     }
     return $feeds;
   }
+  
+  function get_diagnosis($feedid)
+  {
+	  $kwhd_table = "feed_".$feedid;
+	  
+	  $result = db_query("SELECT data  FROM $kwhd_table WHERE DATE(FROM_UNIXTIME(`time`)) = DATE(NOW())");
+	  $today = db_fetch_array($result);
+	  
+	  $result = db_query("SELECT data  FROM $kwhd_table WHERE DATE(FROM_UNIXTIME(`time`)) = DATE_SUB( CURRENT_DATE, INTERVAL 1 DAY )");
+	  $yesterday = db_fetch_array($result);
+
+	  $day_comparison = ($today['data'] - $yesterday['data']) / $today['data'];
+	  
+	  $result = db_query("SELECT SUM(data) as data FROM $kwhd_table WHERE MONTH(FROM_UNIXTIME(`time`)) = MONTH(NOW())");
+	  $this_month = db_fetch_array($result);
+	  
+	  $result = db_query("SELECT SUM(data) as data FROM $kwhd_table WHERE MONTH(FROM_UNIXTIME(`time`)) = MONTH(DATE_SUB( CURRENT_DATE, INTERVAL 1 MONTH ))");
+	  $last_month = db_fetch_array($result);
+
+	  
+	  $month_comparison = ($this_month['data'] - $last_month['data']) / $this_month['data'];
+	  
+	  $result = db_query("SELECT SUM(data) as data FROM $kwhd_table WHERE YEAR(FROM_UNIXTIME(`time`)) = YEAR(NOW())");
+	  $this_year = db_fetch_array($result);
+	  
+	  $result = db_query("SELECT SUM(data) as data FROM $kwhd_table WHERE YEAR(FROM_UNIXTIME(`time`)) = YEAR(DATE_SUB( CURRENT_DATE, INTERVAL 1 YEAR ))");
+	  $last_year = db_fetch_array($result);
+
+	  
+	  $year_comparison = ($this_year['data'] - $last_year['data']) / $this_year['data'];
+	  
+	  $diagnosis = array('day' => $day_comparison, 'month' => $month_comparison, 'year' => $year_comparison);
+	  
+	  return $diagnosis;
+
+  
+  }
 
 
 ?>

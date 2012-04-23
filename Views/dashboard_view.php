@@ -199,7 +199,8 @@ $(function() {
 				.attr("width", w)
 				.attr("height", h+100);
 				
-		    var consumption_max = 1500;
+		    var consumption_max = $(this).attr("max");
+		    var consumption_per_day_max = $(this).attr("maxkwhd");
 				
 			d3.select(".map ul li #powernowlayer").on("click", function() {
 				vis.selectAll(".caption").transition().remove();
@@ -282,7 +283,7 @@ $(function() {
 				caption.append("text")
 					   .attr("x", 20 * color.length*10 - 20 +"px")
 					   .attr("y", 554)
-					   .text("0.15kWhd")
+					   .text(parseFloat(consumption_per_day_max).toFixed(2)+"kWhd")
 					   .attr("style", "font: 10px sans-serif;"); 
 									
 				vis.selectAll("circle.node")

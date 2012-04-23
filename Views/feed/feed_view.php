@@ -42,6 +42,13 @@ Select graph type:</h3>
 <input type="text" name="tag" style="width:100px;" value="<?php echo $tag; ?>" />
 <input type="submit" value="Save" class="button05"/>
 </form>
+
+<h2>Diagnosis</h2>
+<form action="diagnosis" method="get">
+<input type="hidden" name="id" value="<?php echo $id; ?>">
+<input type="submit" value="view" class="button05"/>
+</form>
+
 <h2>Rename feed</h2>
 <form action="rename" method="get">
 <input type="hidden" name="id" value="<?php echo $id; ?>">
