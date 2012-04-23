@@ -8,14 +8,15 @@
     Part of the OpenEnergyMonitor project:
     http://openenergymonitor.org
 
-    FEED CONTROLLER ACTIONS		ACCESS
+    FEED CONTROLLER ACTIONS				ACCESS
 
-    tag?id=1&tag=tag			write
-    rename?id=1&name=newname		write
-    delete?id=1				write
-    list				read
-    view?id=1				read
-    value?id=1				read
+    tag?id=1&tag=tag					write
+    rename?id=1&name=newname			write
+    delete?id=1							write
+    list								read
+    view?id=1							read
+    value?id=1							read
+    comparison?id=1						read
     data?id=1&start=000&end=000&res=1	read
     
   */
@@ -80,18 +81,18 @@
     }
     
     //---------------------------------------------------------------------------------------------------------
-    // Diagnosis
-    // http://yoursite/emoncms/feed/diagnosis?id=1
+    // Over Time Comparison
+    // http://yoursite/emoncms/feed/comparison?id=1
     //--------------------------------------------------------------------------------------------------------- 
-    if ($action == "diagnosis" && $session['read'])
+    if ($action == "comparison" && $session['read'])
     { 
       $feedid = intval($_GET["id"]);
       if (feed_belongs_user($feedid, $session['userid'])) {
-		  $diagnosis = get_diagnosis($feedid);
+		  $reports = get_over_time_comparison($feedid);
 		  $feed = get_feed($feedid);
 		  
-		  if ($format == 'json') $output['content'] = json_encode($diagnosis);
-		  if ($format == 'html') $output['content'] = view("feed/diagnosis_view.php", array('feed' => $feed, 'diagnosis' => $diagnosis));
+		  if ($format == 'json') $output['content'] = json_encode($reports);
+		  if ($format == 'html') $output['content'] = view("feed/comparison_view.php", array('feed' => $feed, 'reports' => $reports));
       } else $output['message'] = "Feed does not exist";
       
     }

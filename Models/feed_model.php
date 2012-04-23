@@ -431,14 +431,14 @@
     return $feeds;
   }
   
-  function get_diagnosis($feedid)
+  function get_over_time_comparison($feedid)
   {
 	  $kwhd_table = "feed_".$feedid;
 	  
-	  $result = db_query("SELECT data  FROM $kwhd_table WHERE DATE(FROM_UNIXTIME(`time`)) = DATE(NOW())");
+	  $result = db_query("SELECT data FROM $kwhd_table WHERE DATE(FROM_UNIXTIME(`time`)) = DATE(NOW())");
 	  $today = db_fetch_array($result);
 	  
-	  $result = db_query("SELECT data  FROM $kwhd_table WHERE DATE(FROM_UNIXTIME(`time`)) = DATE_SUB( CURRENT_DATE, INTERVAL 1 DAY )");
+	  $result = db_query("SELECT data FROM $kwhd_table WHERE DATE(FROM_UNIXTIME(`time`)) = DATE_SUB( CURRENT_DATE, INTERVAL 1 DAY )");
 	  $yesterday = db_fetch_array($result);
 
 	  $day_comparison = ($today['data'] - $yesterday['data']) / $today['data'];
@@ -461,9 +461,9 @@
 	  
 	  $year_comparison = ($this_year['data'] - $last_year['data']) / $this_year['data'];
 	  
-	  $diagnosis = array('day' => $day_comparison, 'month' => $month_comparison, 'year' => $year_comparison);
+	  $reports = array('day' => $day_comparison, 'month' => $month_comparison, 'year' => $year_comparison);
 	  
-	  return $diagnosis;
+	  return $reports;
 
   
   }

@@ -43,12 +43,6 @@ Select graph type:</h3>
 <input type="submit" value="Save" class="button05"/>
 </form>
 
-<h2>Diagnosis</h2>
-<form action="diagnosis" method="get">
-<input type="hidden" name="id" value="<?php echo $id; ?>">
-<input type="submit" value="view" class="button05"/>
-</form>
-
 <h2>Rename feed</h2>
 <form action="rename" method="get">
 <input type="hidden" name="id" value="<?php echo $id; ?>">
@@ -63,6 +57,12 @@ Select graph type:</h3>
 <input type="hidden" name="action" value="feed/delete">
 <input type="hidden" name="id" value="<?php echo $id; ?>">
 <input type="submit" value="delete" class="button05"/>
+</form>
+
+<h2>Over Time Comparison</h2>
+<form action="comparison" method="get">
+<input type="hidden" name="id" value="<?php echo $id; ?>">
+<input type="submit" value="view" class="button05"/>
 </form>
 
 <h2>Notify</h2>
