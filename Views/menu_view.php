@@ -12,3 +12,4 @@
 <li><a href='<?php echo $GLOBALS['path']; ?>device/list'>Devices</a></li>
 <li><a href='<?php echo $GLOBALS['path']; ?>user/view'>Account</a></li>
 <li><a href='<?php echo $GLOBALS['path']; ?>dashboard/view'>Dashboard</a></li>
+<li><a href='<?php echo $GLOBALS['path']; ?>dashboards/view'>Dashboards</a></li>
