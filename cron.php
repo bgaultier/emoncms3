@@ -1,6 +1,6 @@
 <?php
 
-if ($_GET['key'] == "xTC7005d")		// IMPORTANT SET THIS TO A UNIQUE PASSWORD OF YOUR CHOICE
+if ($_GET['key'] == "7Eu7h2d")		// IMPORTANT SET THIS TO A UNIQUE PASSWORD OF YOUR CHOICE
 {					// Ensures no one else can run cron
   ini_set('display_errors','on');
   error_reporting(E_ALL ^ E_NOTICE);

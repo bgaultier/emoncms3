@@ -13,13 +13,12 @@ function send_mail($to,$subject,$body)
     'MIME-Version' => "1.0",
     'Content-type' => "text/html;charset=iso-8859-1"
   );
-  $smtp = Mail::factory('smtp',
-    array ('host' => $mail_host,
-    'auth' => true,
-    'username' => $mail_username,
-    'password' => $mail_password));
+  
+  $parameters['sendmail_path'] = '/usr/lib/sendmail';
+  
+  $sendmail = Mail::factory('sendmail', $parameters);
  
-  $mail = $smtp->send($to, $headers, $body);
+  $mail = $sendmail->send($to, $headers, $body);
  
   if (PEAR::isError($mail)) {
     $output = ("<p>" . $mail->getMessage() . "</p>");
