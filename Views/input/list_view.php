@@ -47,7 +47,7 @@
       var update = (new Date(inputs[z][2])).getTime();
       var lastupdate = (now-update)/1000;
 
-      var secs = (now-update)/1000 -66;
+      var secs = (now-update)/1000;
       var mins = secs/60;
       var hour = secs/3600
 

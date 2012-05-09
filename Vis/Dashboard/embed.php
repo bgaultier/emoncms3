@@ -21,7 +21,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="user-scalable=no, width=device-width" />
 
-    <link rel="stylesheet" type="text/css" href="../../Views/theme/dark/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../Views/theme/wp/style.css" />
 
 <!------------------------------------------------------------------------------------------
   Dashboard related javascripts
@@ -29,6 +29,9 @@
 <!--[if IE]><script language="javascript" type="text/javascript" src="../flot/excanvas.min.js"></script><![endif]-->
 	<script type="text/javascript" src="../flot/jquery.js"></script>
 	<script type="text/javascript" src="../flot/jquery.flot.js"></script>
+	<script type="text/javascript" src="../d3/d3.js?2.7.1"></script>
+	<script type="text/javascript" src="../d3/d3.layout.js?2.7.1"></script>
+	<script type="text/javascript" src="../d3/d3.geom.js?2.7.1"></script>
 	<script type="text/javascript" src="common.js"></script>
 	<script type="text/javascript" src="widgets/dial.js"></script>
 	<script type="text/javascript" src="widgets/led.js"></script>
