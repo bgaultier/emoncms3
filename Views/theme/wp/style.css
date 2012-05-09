@@ -1,5 +1,4 @@
 
-
 html, body {
 margin:0;
 padding:0;
@@ -109,26 +108,25 @@ height:100%;
   }
 
 .header {
-
-border: 1px solid #2A2A2A;
-
-background-color: #464646;
-background-image:-ms-linear-gradient(bottom,#373737,#464646 5px);
-background-image:-moz-linear-gradient(bottom,#373737,#464646 5px);
-background-image:-o-linear-gradient(bottom,#373737,#464646 5px);
-background-image:-webkit-gradient(linear,left bottom,left top,from(#373737),to(#464646));
-background-image:-webkit-linear-gradient(bottom,#373737,#464646 5px);
-background-image:linear-gradient(bottom,#373737,#464646 5px);
-
-color: #CCCCCC;
-direction: ltr;
-font: 13px/28px sans-serif;
-height: 28px;
-left: 0;
-min-width: 600px;
-position: fixed;
-top: 0;
-width: 100%;
+  border: 1px solid #2A2A2A;
+  
+  background-color: #464646;
+  background-image:-ms-linear-gradient(bottom,#373737,#464646 5px);
+  background-image:-moz-linear-gradient(bottom,#373737,#464646 5px);
+  background-image:-o-linear-gradient(bottom,#373737,#464646 5px);
+  background-image:-webkit-gradient(linear,left bottom,left top,from(#373737),to(#464646));
+  background-image:-webkit-linear-gradient(bottom,#373737,#464646 5px);
+  background-image:linear-gradient(bottom,#373737,#464646 5px);
+  
+  color: #CCCCCC;
+  direction: ltr;
+  font: 13px/28px sans-serif;
+  height: 28px;
+  left: 0;
+  min-width: 600px;
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 
 .header h1 {
@@ -149,7 +147,6 @@ font-size: 16px;
  color: #77b4d9;
  text-decoration:none;
 }
-
 
 
 .button {
@@ -306,59 +303,6 @@ table.catlist th:last-of-type {
   cursor:pointer
 }
 
-form#adddevice fieldset {
-  border: none;
-  margin-bottom: 10px;
-}
-
-form#adddevice fieldset:last-of-type {
-  margin-bottom: 0;
-}
-
-form#adddevice ol li {
-  line-height: 30px;
-  list-style: none;
-  padding: 5px 10px;
-  margin-bottom: 2px;
-}
-
-form#adddevice ol li input,
-form#adddevice ol li textarea {
-  border: 1px solid #CCCCCC;
-  border-radius: 4px 4px 4px 4px;
-  box-shadow: 0 1px #FFFFFF;
-  padding: 8px;
-  width: 201px;
-}
-
-form#adddevice ol li input:focus,
-form#adddevice ol li textarea:focus {
-    border-color: rgba(136, 138, 133, 0.75);
-    box-shadow: 0 0 8px rgba(136, 138, 133, 0.5);
-}
-
-form#adddevice label {
-  float: left;
-  font-size: 15px;
-  font-weight: bold; 
-  width: 110px;
-}
-
-form#adddevice input:not([type=submit]):focus,
-form#adddevice textarea:focus {
-  background-color: #eeeeec;
-}
-
-circle.node {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-
-line.link {
-  stroke: #999;
-  stroke-opacity: .6;
-}
-
 .login-container {
   background: none repeat scroll 0 0 #FFFFFF;
   border: 1px solid #E5E5E5;
@@ -419,30 +363,3 @@ line.link {
   float:left;
   padding: 2px;
 }
-
-#layers li:first-of-type {
-  font-weight:bold;
-}
-
-#layers li {
-  list-style: none outside none;
-  margin: 0 0 20px;
-  padding: 0;
-  float: left;
-}
-
-#layers li a {
-  display: block;
-  height: 28px;
-  margin: 0;
-  padding: 0 6px;
-  text-decoration: none;
-  color: #777777;
-  cursor: pointer;
-}
-
-#layers li:hover > a {
-  text-decoration: underline;
-  color: #22A4D9;
-}
-
