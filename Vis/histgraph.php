@@ -12,6 +12,16 @@
     Part of the OpenEnergyMonitor project:
     http://openenergymonitor.org
 
+    This script creates visualises an all-time histogram from a histogram feed.
+    
+    On line 92 it requests from the get feed data api a start time of 0 end time of 0 and full resolution:
+    
+    &start=0&end=0&res=1
+
+    These arguments tells the get feed data model to fetch all data and sum all energy used over the different power segments.
+ 
+    
+
 -------------------------------------------------------------------------------------->
 
  <?php
@@ -23,38 +33,21 @@
 
   $apikey = $_GET["apikey"];
 
+
  ?>
  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <!--[if IE]><script language="javascript" type="text/javascript" src="<?php echo $path;?>Vis/flot/excanvas.min.js"></script><![endif]-->
     <script language="javascript" type="text/javascript" src="<?php echo $path;?>Vis/flot/jquery.js"></script>
     <script language="javascript" type="text/javascript" src="<?php echo $path;?>Vis/flot/jquery.flot.js"></script>
-    <script language="javascript" type="text/javascript" src="<?php echo $path;?>Vis/flot/jquery.flot.selection.js"></script>
-    <script language="javascript" type="text/javascript" src="<?php echo $path;?>Vis/flot/scripts/inst.js"></script>
  </head>
  <body style="font-family:arial">
 
     <div id="graph_bound" style="height:100%; width:100%; position:relative; ">
       <div id="graph"></div>
-      <div style="position:absolute; top:20px; right:20px;">
-
-
-        <input class="time" type="button" value="D" time="1"/>
-        <input class="time" type="button" value="W" time="7"/>
-        <input class="time" type="button" value="M" time="30"/>
-        <input class="time" type="button" value="Y" time="365"/> | 
-
-        <input id="zoomin" type="button" value="+"/>
-        <input id="zoomout" type="button" value="-"/>
-        <input id="left" type="button" value="<"/>
-        <input id="right" type="button" value=">"/>
-
-      </div>
-
-
-
+    
         <div id="loading" style="position:absolute; top:0px; left:0px; width:100%; height:100%; background-color: rgba(255,255,255,0.5);"></div>
-        <h3 style="position:absolute; top:00px; left:50px;"><span id="stats"></span></h3>
+        <h3 style="position:absolute; top:00px; left:50px;"><span id="stat"></span></h3>
     </div>
 
    <script id="source" language="javascript" type="text/javascript">
@@ -62,16 +55,8 @@
    var feedid = "<?php echo $feedid; ?>";				//Fetch table name
    var path = "<?php echo $path; ?>";
    var apikey = "<?php echo $apikey; ?>";
-   //----------------------------------------------------------------------------------------
-   // These start time and end time set the initial graph view window 
-   //----------------------------------------------------------------------------------------
-   var timeWindow = (3600000*24.0);				//Initial time window
-   var start = ((new Date()).getTime())-timeWindow;		//Get start time
-   var end = (new Date()).getTime();				//Get end time
 
-   var paverage;
-   var npoints;
-
+   $(function () {
 
      var placeholder = $("#graph");
 
@@ -83,33 +68,49 @@
      //----------------------------------------------------------------------------------------
 
      var graph_data = [];                              //data array declaration
-
-     vis_feed_data(apikey,feedid,start,end,10);
+     vis_feed_data(apikey,feedid);
 
      //--------------------------------------------------------------------------------------
-     // Graph zooming
+     // Plot flot graph
      //--------------------------------------------------------------------------------------
-     placeholder.bind("plotselected", function (event, ranges) 
+     
+     function plotGraph()
      {
-       // clamp the zooming to prevent eternal zoom
-       if (ranges.xaxis.to - ranges.xaxis.from < 0.00001) ranges.xaxis.to = ranges.xaxis.from + 0.00001;
-       if (ranges.yaxis.to - ranges.yaxis.from < 0.00001) ranges.yaxis.to = ranges.yaxis.from + 0.00001;
-       start = ranges.xaxis.from;					//covert into usable time values
-       end = ranges.xaxis.to;						//covert into usable time values
-       var res = getResolution(start, end);
-       vis_feed_data(apikey,feedid,start,end,res);			//Get new data and plot graph
+          $.plot(placeholder,[                    
+          {
+            data: graph_data ,				//data
+            bars: { show: true, align: "center", barWidth: 50, fill: true }
+          }], {
+            xaxis: { mode: null }, grid: { show: true, hoverable: true }
+          }); 
+          $('#loading').hide();
+     }
+
+     //--------------------------------------------------------------------------------------
+     // Fetch Data
+     //--------------------------------------------------------------------------------------
+     function vis_feed_data(apikey,feedid)
+     {
+       $('#loading').show();
+       $("#stat").html("Loading...");
+       $.ajax({                                       //Using JQuery and AJAX
+         url: path+'feed/data.json',                         
+         data: "&apikey="+apikey+"&id="+feedid+"&start=0&end=0&res=1",
+         dataType: 'json',                            //and passes it through as a JSON    
+         success: function(data) 
+         {
+           graph_data = [];   
+           graph_data = data;
+           $("#stat").html("");
+           plotGraph();
+         } 
+       });
+     }
+
+     placeholder.bind("plothover", function (event, pos, item) {
+        if (item!=null) $("#stat").html((item.datapoint[1]).toFixed(2)+" kWh");
      });
-
-     //----------------------------------------------------------------------------------------------
-     // Operate buttons
-     //----------------------------------------------------------------------------------------------
-     $("#zoomout").click(function () {inst_zoomout();});
-     $("#zoomin").click(function () {inst_zoomin();});
-     $('#right').click(function () {inst_panright();});
-     $('#left').click(function () {inst_panleft();});
-     $('.time').click(function () {inst_timewindow($(this).attr("time"));});
-     //-----------------------------------------------------------------------------------------------
-
+  });
   //--------------------------------------------------------------------------------------
   </script>
 

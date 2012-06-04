@@ -19,8 +19,13 @@
     getapiread				read
     getapiwrite 			write
     view				write
+    setlang				write
 
   */
+
+  // no direct access
+  defined('EMONCMS_EXEC') or die('Restricted access');
+
   function user_controller()
   {
     global $session, $action,$format;
@@ -34,14 +39,14 @@
     //---------------------------------------------------------------------------------------------------------
     if ($action == 'login')
     {
-      $username = preg_replace('/[^\w\s-.]/','',$_GET["name"]);	// filter out all except for alphanumeric white space and dash
+      $username = preg_replace('/[^\w\s-.]/','',$_POST["name"]);	// filter out all except for alphanumeric white space and dash
       $username = db_real_escape_string($username);
 
-      $password = db_real_escape_string($_GET['pass']);
+      $password = db_real_escape_string($_POST["pass"]);
       $result = user_logon($username,$password);
       if ($result == 0) $output['message'] = "Invalid username or password"; else { $output['message'] = "Welcome, you are now logged in";
 
-      if ($format == 'html') header("Location: ../dashboard/view");}
+      if ($format == 'html') header("Location: ../dashboards/view");}
     }
 
     //---------------------------------------------------------------------------------------------------------
@@ -51,10 +56,10 @@
     //---------------------------------------------------------------------------------------------------------
     if ($action == 'create')
     {
-      $username = preg_replace('/[^\w\s-.]/','',$_GET["name"]);	// filter out all except for alphanumeric white space and dash
+      $username = preg_replace('/[^\w\s-.]/','',$_POST["name"]);	// filter out all except for alphanumeric white space and dash
       $username = db_real_escape_string($username);
 
-      $password = db_real_escape_string($_GET['pass']);
+      $password = db_real_escape_string($_POST["pass"]);
 
       if (get_user_id($username)!=0) $output['message'] = "Sorry username already exists";
       if (strlen($password) < 4 || strlen($password) > 30) $output['message'] = "Please enter a password that is 4 to 30 characters long<br/>";
@@ -63,7 +68,7 @@
         create_user($username,$password);
         $result = user_logon($username,$password);
         $output['message'] = "Your new account has been created";
-        if ($format == 'html') header("Location: ../dashboard/view");
+        if ($format == 'html') header("Location: ../dashboards/view");
 
         if ($_SESSION['write']) create_user_statistics($_SESSION['userid']);
       }
@@ -71,8 +76,8 @@
 
     // http://yoursite/emoncms/user/changepass?old=sdgs43&new=sdsg345
     if ($action == 'changepass' && $_SESSION['write']) {
-      $oldpass =  db_real_escape_string($_GET['oldpass']);
-      $newpass =  db_real_escape_string($_GET['newpass']);
+      $oldpass =  db_real_escape_string($_POST['oldpass']);
+      $newpass =  db_real_escape_string($_POST['newpass']);
       if (change_password($_SESSION['userid'],$oldpass,$newpass)) $output['message'] = "Your password has been changed"; else $output['message'] = "Invalid old password";
     }
 
@@ -106,10 +111,15 @@
     //---------------------------------------------------------------------------------------------------------
     if ($action == 'logout' && $session['read'])
     { 
-      user_logout(); 
-      $output['message'] = "You are logged out"; 
+        if ($_POST['CSRF_token'] == $_SESSION['CSRF_token']) {
+            user_logout();
+            $output['message'] = "You are logged out";
+        } else {
+            reset_CSRF_token();
+            $output['message'] = "Invalid token";
+        }
 
-      if ($format == 'html') header("Location: ../");
+       if ($format == 'html') header("Location: ../");
     }
 
     //---------------------------------------------------------------------------------------------------------
@@ -140,6 +150,15 @@
 
       if ($format == 'json') $output['content'] = json_encode($user);
       if ($format == 'html') $output['content'] = view("user_view.php", array('user' => $user, 'stats'=>$stats));
+    }
+
+    //---------------------------------------------------------------------------------------------------------
+    // SET USERS DEFAULT LANGUAGE
+    // http://yoursite/emoncms/user/setlang
+    //---------------------------------------------------------------------------------------------------------
+    if ($action == 'setlang' && $session['write']) {
+      set_user_lang($session['userid'],$session['lang']);
+      if ($format == 'html') header("Location: view");
     }
 
     return $output;

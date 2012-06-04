@@ -8,6 +8,8 @@
     Part of the OpenEnergyMonitor project:
     http://openenergymonitor.org
   */
+  // no direct access
+  defined('EMONCMS_EXEC') or die('Restricted access');
 
   function user_apikey_session_control($apikey_in)
   {
@@ -23,7 +25,8 @@
       $session['userid'] = $userid;
       $session['read'] = 1;
       $session['write'] = 0;
-      $session['admin'] = 0;    
+      $session['admin'] = 0; 
+      $session['lang'] = "en";   
     }
 
     $userid = get_apikey_write_user($apikey_in);
@@ -33,7 +36,8 @@
       $session['userid'] = $userid;
       $session['read'] = 1;
       $session['write'] = 1;
-      $session['admin'] = 0;  
+      $session['admin'] = 0;
+      $session['lang'] = "en";
   
     }
     //----------------------------------------------------
@@ -113,7 +117,7 @@
 
   function user_logon($username,$password)  
   {
-    $result = db_query("SELECT id,password,admin, salt FROM users WHERE username = '$username'");
+    $result = db_query("SELECT id,password,admin,salt,lang FROM users WHERE username = '$username'");
     $userData = db_fetch_array($result);
     $hash = hash('sha256', $userData['salt'] . hash('sha256', $password) );
     
@@ -121,6 +125,7 @@
     {
       $_SESSION['read'] = 0;
       $_SESSION['write'] = 0;
+      $_SESSION['admin'] = 0;
       $success = 0;
     }
     else
@@ -131,6 +136,7 @@
       $_SESSION['read'] = 1;
       $_SESSION['write'] = 1;
       $_SESSION['admin'] = $userData['admin'];
+      $_SESSION['lang'] = $userData['lang'];
       $success = 1;
     }
     return $success;
@@ -179,6 +185,8 @@
     }
   }
 
+
+
   function get_user_list()
   {
     $result = db_query("SELECT id, username, admin FROM users");
@@ -189,6 +197,11 @@
     }
 
     return $userlist;
+  }
+
+  function set_user_lang($userid,$lang)
+  {
+    db_query("UPDATE users SET lang = '$lang' WHERE id='$userid'");
   }
 
 

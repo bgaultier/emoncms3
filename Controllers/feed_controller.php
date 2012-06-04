@@ -20,6 +20,10 @@
     data?id=1&start=000&end=000&res=1	read
     
   */
+
+  // no direct access
+  defined('EMONCMS_EXEC') or die('Restricted access');
+
   function feed_controller()
   {
     require "Models/feed_model.php";
@@ -27,6 +31,24 @@
 
     $output['content'] = "";
     $output['message'] = "";
+
+    //---------------------------------------------------------------------------------------------------------
+    // Set feed tag
+    // http://yoursite/emoncms/feed/tag?id=1&tag=tag
+    //---------------------------------------------------------------------------------------------------------
+    if ($action == "type" && $session['write'])
+    { 
+      $feedid = intval($_GET["id"]);
+      $type = intval($_GET["type"]);
+
+      if (feed_belongs_user($feedid, $session['userid'])) {
+        set_feed_datatype($feedid,$type);
+        $output['message'] = "feed type changed";
+      } else $output['message'] = "feed does not exist";
+
+      if ($format == 'html') header("Location: view?id=$feedid");	// Return to feed list page
+    }
+
 
     //---------------------------------------------------------------------------------------------------------
     // Set feed tag

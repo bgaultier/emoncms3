@@ -8,6 +8,10 @@
     Part of the OpenEnergyMonitor project:
     http://openenergymonitor.org
   */
+
+  // no direct access
+  defined('EMONCMS_EXEC') or die('Restricted access');
+
   function controller($cat)
   {
     $controller = $cat."_controller";
@@ -25,9 +29,21 @@
 
   function view($filepath, array $args)
   {
+    global $session;
+    $lang = $session['lang'];
+
     extract($args);
     ob_start();       
-    include "Views/".$filepath;   
+    include "Views/$lang/$filepath";   
+    $content = ob_get_clean();    
+    return $content;
+  }
+
+  function theme($filepath, array $args)
+  {
+    extract($args);
+    ob_start();       
+    include "Views/$filepath";   
     $content = ob_get_clean();    
     return $content;
   }
@@ -40,6 +56,17 @@
     $json = str_replace('}', '', $json);		//Remove JSON end characters
     $datapairs = explode(',', $json);
     return $datapairs;
+  }
+
+  function emon_session_start() {
+    session_set_cookie_params(
+            3600 * 24 * 30, //lifetime, 30 days
+            "/", //path
+            "", //domain
+            false, //secure
+            true//http_only
+    );
+    session_start();
   }
 
 ?>

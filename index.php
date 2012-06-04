@@ -14,9 +14,12 @@
     http://openenergymonitor.org/emon/forum
   */
 
-  session_start();
+  define('EMONCMS_EXEC', 1);
 
-  error_reporting(E_ALL);
+  require "Includes/core.inc.php";
+  emon_session_start();
+
+  //error_reporting(E_ALL);
   ini_set('display_errors','on');
   error_reporting(E_ALL ^ E_NOTICE);
 
@@ -27,7 +30,6 @@
   if ($ssl == "on") $proto = "https";
   $path = dirname("$proto://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'])."/";
 
-  require "Includes/core.inc.php";
   require "Includes/db.php";
   require "Models/user_model.php";
   require "Models/statistics_model.php";
@@ -37,7 +39,7 @@
   if ($e == 3) {echo "db settings error"; die;}
   if ($e == 4) header("Location: setup.php");
 
-  $q = preg_replace('/[^.\/a-z]/','',$_GET['q']); // filter out all except a-z / . 
+  $q = preg_replace('/[^.\/a-z0-9]/','',$_GET['q']); // filter out all except a-z / . 
   $q = db_real_escape_string($q);		  // second layer
   $args = preg_split( '/[\/.]/',$q);		  // split string at / .
 
@@ -45,10 +47,19 @@
   $action	= $args[1];
   if ($args[2]) $format	= $args[2]; else $format = "html";
 
+  $lang = preg_replace('/[a-z]/','',$_GET['lang']);
+
+  // Multilanguage support
+  // Set language from url attribute lang and save it to the session variable
+  // The view function in core.inc.php then selects the view depending on the lang session variable
+  $lang =  $_GET['lang']; if ($lang=='en') $_SESSION['lang'] = $lang; else $lang = null;
+  if (!$_SESSION['lang']) $_SESSION['lang'] = "en";	// Set default language
+
   $session['read'] = $_SESSION['read'];
   $session['write'] = $_SESSION['write'];
   $session['userid'] = $_SESSION['userid'];
   $session['admin'] = $_SESSION['admin'];
+  $session['lang'] = $_SESSION['lang'];
 
   if ($_GET['apikey']) $session = user_apikey_session_control($_GET['apikey']);
 
@@ -69,7 +80,7 @@
       $menu = view("menu_view.php", array());
     }
     if (!$session['read']) $content = view("user/login_block.php", array());
-    print view("theme/wp/theme.php", array('menu' => $menu, 'user' => $user, 'content' => $content,'message' => $message));
+    print theme("theme/wp/theme.php", array('menu' => $menu, 'user' => $user, 'content' => $content,'message' => $message));
   }
 
   if ($controller == "api" && $action == "post") inc_uphits_statistics($session['userid']); else inc_dnhits_statistics($session['userid']);

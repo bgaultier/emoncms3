@@ -14,6 +14,10 @@
     add?inputid=1&type=1&arg=power	write
 
   */
+
+  // no direct access
+  defined('EMONCMS_EXEC') or die('Restricted access');
+
   function process_controller()
   {
     require "Models/process_model.php";
@@ -63,7 +67,7 @@
         // First check if feed exists of given feed name and user.
         $id = get_feed_id($_SESSION['userid'],$arg);
         // If it doesnt then create a feed, $process[3] is the number of datafields in the feed table
-        if ($id==0)  $id = create_feed($_SESSION['userid'],$arg, $process[3]);
+        if ($id==0)  $id = create_feed($_SESSION['userid'],$arg, $process[3], $process[4]);
         $arg = $id;
       }
 

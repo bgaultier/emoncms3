@@ -14,9 +14,9 @@
   */
 
   //=====================================================
-  //$runnable = TRUE; // ENABLE THIS ONCE TO FORCE UPDATE
+  $runnable = TRUE; // ENABLE THIS ONCE TO FORCE UPDATE
   //=====================================================
-
+  define('EMONCMS_EXEC', 1);
   require "Includes/db.php";
   $e = db_connect();
   if ($e == 4) $runnable = TRUE;
@@ -33,7 +33,8 @@
     'apikey_write'=> array('type'=>'varchar(64)'),
     'apikey_read'=> array('type'=>'varchar(64)'),
     'lastlogin'=> array('type'=>'DATETIME'),
-    'admin'=> array('type'=>'INT NOT NULL')
+    'admin'=> array('type'=>'INT NOT NULL'),
+    'lang'=> array('type'=>'varchar(2)')
   );
 
   $schema['input'] = array(
@@ -58,7 +59,8 @@
     'week'=> array('type'=>'FLOAT'),
     'month'=> array('type'=>'FLOAT'),
     'year'=> array('type'=>'FLOAT'),
-    'type'=> array('type'=>'int NOT NULL')
+    'type'=> array('type'=>'int NOT NULL'),
+    'datatype'=> array('type'=>'int NOT NULL')
   );
 
   $schema['feed_relation'] = array(
@@ -67,8 +69,11 @@
   );
 
   $schema['dashboard'] = array(
+    'id'=> array('type'=>'int NOT NULL AUTO_INCREMENT, PRIMARY KEY(id,userid)'),
     'userid'=> array('type'=>'int'),
-    'content'=> array('type'=>'text')
+    'content'=> array('type'=>'text'),
+    'name'=> array('type'=>"VARCHAR(30) DEFAULT 'no name'"),
+    'description'=> array('type'=>"VARCHAR(255) DEFAULT 'no description'")
   );
 
   $schema['notify'] = array(
@@ -97,6 +102,11 @@
     'uphits'=> array('type'=>'int'),
     'dnhits'=> array('type'=>'int'),
     'memory'=> array('type'=>'int')
+  );
+
+  $schema['multigraph'] = array(
+    'userid'=> array('type'=>'int'),
+    'feedlist'=> array('type'=>'text')
   );
 
   $out = "<table style='font-size:12px'><tr><th width='220'></th><th></th></tr>";

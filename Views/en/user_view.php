@@ -8,11 +8,39 @@
     http://openenergymonitor.org
 -->
 
+<?php
+
+// no direct access
+defined('EMONCMS_EXEC') or die('Restricted access');
+
+global $path, $session; 
+
+?>
 
 <div class='lightbox' style="margin-bottom:20px; margin-left:3%; margin-right:3%;">
 
   <h2>User: <?php echo $user['username']; ?></h2>
+   <div class="widget-container-nc" style="width:600px;">
 
+  <table><tr>
+  <td width="130"><h3>Language</h3></td>
+  <td><p>Select preferred language:</p></td>
+  <td>
+  <form action="setlang" method="get">
+
+  <select name="lang">
+    <option selected value="en">English</option>
+  </select>
+
+        
+  <input type="submit" value="Set" class="button05">
+  </form>
+  </td>
+  </tr>
+  </table>
+
+  </div>
+  <div style="clear:both;"></div><br/>
   <div class="widget-container-nc" style="width:600px;">
 
   <h3>API keys</h3>
@@ -50,7 +78,7 @@
 
 <div class="widget-container-nc"  style="width:600px;">
 <h3>Change password</h3>
-<form action="changepass" method="get">
+<form action="changepass" method="post">
 <p><b>Old password:</b><br/>
 <input class="inp01" type="password" name="oldpass" style="width:250px"/></p>
 <p><b>New password:</b><br/>
