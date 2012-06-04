@@ -76,6 +76,7 @@ function fast_update()
 {
 	draw_dials();
 	draw_leds();
+	draw_maps();
 }
 				
 function slow_update() {
