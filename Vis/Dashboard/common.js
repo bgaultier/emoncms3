@@ -356,7 +356,7 @@ function draw_maps()
 				  .attr("cy", function(d) { return d.y*5.6; })
 				  .attr("r", 5)
 				  .style("fill", function(d) { return fill(d.typeid); })
-				  .on("click", function(d) { draw_node_informations(d); });
+				  .on("click", function(d) { render_node_information(d); });
 
 			  node.append("title")
 				  .text(function(d) { return d.hostname; });
@@ -418,7 +418,7 @@ function draw_maps()
   	});
 }
   
-function draw_node_informations(node)
+function render_node_information(node)
 {
   var out = '<table><tr><th>Hostname:</th><td id="hostname">' + node.hostname + '</tr>';
   if(node.consumption)
