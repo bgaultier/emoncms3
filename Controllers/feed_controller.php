@@ -164,6 +164,60 @@
       $feedid = intval($_GET["id"]);
       if (feed_belongs_user($feedid,$session['userid'])) $output['content'] = get_feed_value($feedid);
     }
+    
+    //---------------------------------------------------------------------------------------------------------
+    // current feed value
+    // http://yoursite/emoncms/feed/arduino.xml?id=1
+    //---------------------------------------------------------------------------------------------------------
+    if ($action == 'arduino' && $session['read'])
+    {
+      $feedid = intval($_GET["id"]);
+      if (feed_belongs_user($feedid,$session['userid'])) {
+		  
+		  $xml = simplexml_load_file('http://www.google.com/ig/api?weather=Rennes');
+		  $information = $xml->xpath("/xml_api_reply/weather/forecast_information");
+		  $current = $xml->xpath("/xml_api_reply/weather/current_conditions");
+		  $forecast_list = $xml->xpath("/xml_api_reply/weather/forecast_conditions");
+		  
+		  $end = time() * 1000;
+		  $start = $end - (3600000 * 24 * 7);
+		  
+		  $data = get_feed_data($feedid,$start,$end, 1, 7);
+		  
+		  foreach ($data as $value) {
+			  $values[] = $value[1];
+		  }
+		  
+		  $max = max($values);
+		  
+		  foreach ($values as $key => $value) {
+			   $values[$key] = ($value * 7) / $max;
+		  }
+		  
+		  $xml = "<?xml version=\"1.0\"?>\n";
+		  
+		  $xml .= "<time>" . date('H:i') . "</time>\n";
+		  $xml .= "<today>" . icon_to_number($current[0]->icon['data']) . "</today>\n";
+		  $xml .= "<temperature>". sprintf("%02d", $current[0]->temp_c['data']) . "</temperature>\n";
+		  $xml .= "<tomorrow>" . icon_to_number($forecast_list[0]->icon['data']) . "</tomorrow >\n";
+		  $xml .= "<low>" . sprintf("%02d", (($forecast_list[0]->low['data']-32)*5/9)) . "</low>\n";
+		  $xml .= "<high>" . sprintf("%02d", (($forecast_list[0]->high['data']-32)*5/9)) . "</high>\n";
+		  
+		  $xml .= "<instantaneous>" .round(get_feed_value($feedid - 1 )) . "</instantaneous>\n";
+		  $xml .= "<history>\n";
+		  foreach ($values as $key => $value) {
+			  $xml .= "\t<day" . $key . ">" . round(15 - $value) ."</day" . $key . ">\n";
+		  }
+		  $xml .= "</history>";
+		  
+		  
+		  
+		  if ($format == 'xml') {
+			  header('Content-type: text/xml');
+			  $output['content'] = $xml;
+		  }
+	  }
+    }
 
     //---------------------------------------------------------------------------------------------------------
     // get feed data
@@ -186,6 +240,47 @@
     }
 
     return $output;
+  }
+  
+  function icon_to_number($icon) {
+	  switch($icon) {
+		case "/ig/images/weather/sunny.gif":
+		case "/ig/images/weather/mostly_sunny.gif":
+			return 0;
+			break;
+		case "/ig/images/weather/cloudy.gif":
+		case "/ig/images/weather/partly_cloudy.gif":
+		case "/ig/images/weather/mostly_cloudy.gif":
+			return 1;
+			break;
+			
+		case "/ig/images/weather/rain.gif":
+		case "/ig/images/weather/chance_of_rain.gif":
+		case "/ig/images/weather/storm.gif":
+		case "/ig/images/weather/thunderstorm.gif":
+		case "/ig/images/weather/chance_of_storm.gif":
+			return 2;
+			break;
+
+		case "/ig/images/weather/dust.gif":
+		case "/ig/images/weather/fog.gif":
+		case "/ig/images/weather/smoke.gif":
+		case "/ig/images/weather/haze.gif":
+		case "/ig/images/weather/mist.gif":
+			return 3;
+			break;
+
+		case "/ig/images/weather/flurries.gif":
+		case "/ig/images/weather/snow.gif":
+		case "/ig/images/weather/chance_of_snow.gif":
+		case "/ig/images/weather/icy.gif":
+		case "/ig/images/weather/sleet.gif":
+			return 4;
+			break;
+		default:
+			return 1;
+			break;
+	}
   }
 ?>
 

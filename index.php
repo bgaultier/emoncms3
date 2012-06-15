@@ -67,7 +67,7 @@
   $message = $output['message'];
   $content = $output['content']; 
 
-  if ($format == 'json')
+  if ($format == 'json' || $format == 'xml')
   {
     print $message.$content;
     if (!($message.$content)) print "Sorry, you need a valid apikey or be logged in to see this page";
