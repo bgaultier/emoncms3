@@ -8,11 +8,7 @@
     http://openenergymonitor.org
   */
   
-  var kwhd1 = 0,
-	  kwhd2 = 0;
-  
-function plotChart(container, id, path, kwhd, apikey, month, year) {
-	
+function plotChart(container, id, month) {	
 	//----------------------------------------------------------------------------------------
 	// These start time and end time set the initial graph view window 
 	//----------------------------------------------------------------------------------------
@@ -26,7 +22,7 @@ function plotChart(container, id, path, kwhd, apikey, month, year) {
 	//--------------------------------------------------------------
 	$.ajax({ 
 		url: path+"feed/data.json",
-		data: "&apikey="+apikey+"&id="+kwhd+"&start=" + (startDate.getTime() - 100)  +"&end=" + endDate.getTime() + "&dp=30", // - 100 is to get the day before the first
+		data: "&apikey=" + apikey + "&id=" + kwhd + "&start=" + (startDate.getTime() - 100)  +"&end=" + endDate.getTime() + "&dp=30", // - 100 is to get the day before the first
 		dataType: 'json',        
 		success: function(data_in)
 		{
@@ -59,7 +55,7 @@ function plotChart(container, id, path, kwhd, apikey, month, year) {
 				
 			$("#prev"+id).click(function () {
 				container.html("");
-				plotChart(container, id, path, kwhd, apikey, month-1, year);
+				plotChart(container, id, month-1, year);
 				
 			});
 				
@@ -70,7 +66,7 @@ function plotChart(container, id, path, kwhd, apikey, month, year) {
 			
 			$("#next"+id).click(function () {
 				container.html("");
-				plotChart(container, id, path, kwhd, apikey, month+1, year);
+				plotChart(container, id, month+1);
 			});
 			
 			var vis = container
@@ -131,16 +127,17 @@ function plotChart(container, id, path, kwhd, apikey, month, year) {
 
 function render_daily_information(id, timestamp, kwhd) {
 	var d = new Date(timestamp);
-	var out = '<table style="margin-left: auto; margin-right: auto; text-align:left;">';
-	out += '<tr><th>Date :</th><td id="date">' + d.toDateString()  + '</tr>';
-	out += '<tr><th>Energy :</th><td id="kwhd">' + parseFloat(kwhd).toFixed(2)  + ' kWh/d</tr>';
-	out += '<tr><th>Cost :</th><td id="cost">'+ parseFloat(kwhd * 0.12).toFixed(2) + '€/d | ' + parseFloat(kwhd * 0.12 * 365).toFixed(0) + '€/y</div></td></tr>';
+	var out = '<table style="text-align:left; margin: auto;">'
+	out += '<tr><th>Date :</th><td id="date">' + d.toDateString()  + '</td></tr>'
+	out += '<tr><th>Energy :</th><td id="kwhd">' + parseFloat(kwhd).toFixed(2)  + ' kWh/d</td></tr>';
+	out += '<tr><th>Cost :</th><td id="costd">'+ parseFloat(kwhd * price).toFixed(2) + currency + '/d, ' + parseFloat(kwhd * price * 365).toFixed(0) + currency + '/y</td></tr>';
 	out += '</table>';
 	
 	$('#day' + id).each(function(index)
 	{
 		$(this).hide().html(out).fadeIn();
 	});
+	
 	var orange = "#FF7D14"
 		green = "#C0E392";
 	
@@ -156,20 +153,21 @@ function render_daily_information(id, timestamp, kwhd) {
 		var result2;
 		if (result > 0) {
 			result = "+" +  parseFloat(result).toFixed(2);
-			result2 = "+" + parseFloat(result * 0.12).toFixed(2);
+			result2 = "+" + parseFloat(result * price).toFixed(2);
 			color = orange;
 		}
 		else {
 			result = parseFloat(result).toFixed(2);
-			result2 = parseFloat(result * 0.12).toFixed(2);
+			result2 = parseFloat(result * price).toFixed(2);
 			
 		}
-		out = '<div class="comparison"><h1 style="color:' + color + ';\">' + result + 'kWh</h1>';
-		out += '<h2>' + result2 + '€/d (';
-		out += parseFloat(result2 * 365).toFixed(0) + '€/y)</h2></div>';
+		out = '<div class="comparison"><h1>Comparison</h1>';
+		out += '<h2 style="color:' + color + ';\">' + result + 'kWh</h2>';
+		out += '<h2 style ="color :#33A4D9;">' + result2 + currency + '/d (';
+		out += parseFloat(result2 * 365).toFixed(0) + currency + '/y)</h2></div>';
 		
-		$('#comparison').each(function(index) {
-			$(this).hide().html(out).fadeIn();
+		$('#comparisonbox').each(function(index) {
+			$(this).html(out);
 		});
 	}
 }

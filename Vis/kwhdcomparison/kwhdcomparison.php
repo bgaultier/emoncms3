@@ -12,10 +12,11 @@
   <?php
 		$path = dirname("http://".$_SERVER['HTTP_HOST'].str_replace('Vis/kwhdcomparison', '', $_SERVER['SCRIPT_NAME']))."/";
 		
-		$kwhd = $_GET['kwhd'];	//Get the table ID so that we know what graph to draw
+		$power = $_GET['power'];
+		$kwhd = $_GET['kwhd'];
 		$apikey = $_GET['apikey'];
-		$month = $_GET['month'];
-		$year = $_GET['year'];
+		$currency = $_GET['currency']?$_GET['currency']:'&pound;';
+		$pricekwh = $_GET['pricekwh']?$_GET['pricekwh']:0.12;
   ?>
 	
 	<head>
@@ -76,12 +77,8 @@
 	}
 	
 	.comparison {
-		background: none repeat scroll 0 0 #FFFFFF;
-		border: 1px solid #E5E5E5;
-		box-shadow: 0 4px 10px -1px rgba(200, 200, 200, 0.7);
-		padding : 20px;
-		margin-left : auto;
-		margin-right:auto;
+		border-bottom: 1px solid #DFDFDF;
+		border-top: 1px solid #DFDFDF;
 		text-align: center;
   }
 
@@ -89,17 +86,19 @@
 	
 	<body>
 		<script type="text/javascript">
-			var kwhd = "<?php echo $kwhd; ?>";				//Fetch table name
-			var path = "<?php echo $path; ?>";
+			var kwhd = <?php echo $kwhd; ?>;
+			var power = <?php echo $power; ?>;
+			var path = "<?php echo $path; ?>";  
 			var apikey = "<?php echo $apikey; ?>";
-			var month = "<?php echo $month; ?>";
-			var year = "<?php echo $year; ?>";
+			var price = <?php echo $pricekwh ?>;
+			var currency = "<?php echo $currency ?>";
 			
 			var today = new Date();
-			if(!month)
-				month = today.getMonth();
-			if(!year)
-				year = today.getFullYear();
+			var month = today.getMonth();
+			var year = today.getFullYear();
+			
+			var kwhd1 = 0,
+				kwhd2 = 0;
 				
 			d3.select("body")
 				.append("div")
@@ -108,7 +107,7 @@
 			var container = d3.select("#container")
 							.append("div")
 							.attr("id", "charts")
-							.attr("style", "float : left; width : 600px;");
+							.attr("style", "float : left; width : 615px; border-right: 1px solid #DFDFDF");
 							
 			d3.select("#container")
 				.append("div")
@@ -132,7 +131,7 @@
 				
 			d3.select("#placeholder")
 				.append("div")
-				.attr("id", "comparison")
+				.attr("id", "comparisonbox")
 				.attr("style", "width : 100%; height : 176px;");
 			
 			d3.select("#placeholder")
@@ -140,9 +139,9 @@
 				.attr("id", "day2")
 				.attr("style", "width : 100%; height : 176px;");
 			
-			plotChart(container1, 1, path, kwhd, apikey, month-1, year);
+			plotChart(container1, 1, month-1);
+			plotChart(container2, 2, month);
 			
-			plotChart(container2, 2, path, kwhd, apikey, month, year);
 			
     </script>
 	</body>
