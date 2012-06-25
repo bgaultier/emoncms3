@@ -408,25 +408,13 @@ form#adddevice fieldset:last-of-type {
 }
 
 form#adddevice ol li {
-  line-height: 30px;
   list-style: none;
   padding: 5px 10px;
-  margin-bottom: 2px;
 }
 
 form#adddevice ol li input,
 form#adddevice ol li textarea {
-  border: 1px solid #CCCCCC;
-  border-radius: 4px 4px 4px 4px;
-  box-shadow: 0 1px #FFFFFF;
-  padding: 8px;
   width: 201px;
-}
-
-form#adddevice ol li input:focus,
-form#adddevice ol li textarea:focus {
-    border-color: rgba(136, 138, 133, 0.75);
-    box-shadow: 0 0 8px rgba(136, 138, 133, 0.5);
 }
 
 form#adddevice label {
@@ -434,11 +422,6 @@ form#adddevice label {
   font-size: 15px;
   font-weight: bold; 
   width: 110px;
-}
-
-form#adddevice input:not([type=submit]):focus,
-form#adddevice textarea:focus {
-  background-color: #eeeeec;
 }
 
 circle.node {
