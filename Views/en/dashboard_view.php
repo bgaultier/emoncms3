@@ -16,9 +16,7 @@ Dashboard related javascripts
 <!--[if IE]><script language="javascript" type="text/javascript" src="<?php echo $path;?>Vis/flot/excanvas.min.js"></script><![endif]-->
 <script type="text/javascript" src="<?php echo $path;?>Vis/flot/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $path;?>Vis/flot/jquery.flot.js"></script>
-<script type="text/javascript" src="<?php echo $path;?>Vis/d3/d3.js?2.7.1"></script>
-<script type="text/javascript" src="<?php echo $path;?>Vis/d3/d3.layout.js?2.7.1"></script>
-<script type="text/javascript" src="<?php echo $path;?>Vis/d3/d3.geom.js?2.7.1"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Vis/d3.v2.min.js"></script>
 <script type="text/javascript" src="<?php echo $path;?>Vis/Dashboard/common.js"></script>
 <script type="text/javascript" src="<?php echo $path;?>Vis/Dashboard/widgets/dial.js"></script>
 <script type="text/javascript" src="<?php echo $path;?>Vis/Dashboard/widgets/led.js"></script>
