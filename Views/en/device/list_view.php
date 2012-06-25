@@ -10,9 +10,7 @@
 
 <?php global $path; ?>
 
-<script type="text/javascript" src="<?php print $path; ?>Vis/d3/d3.js?2.7.1"></script>
-<script type="text/javascript" src="<?php print $path; ?>Vis/d3/d3.layout.js?2.7.1"></script>
-<script type="text/javascript" src="<?php print $path; ?>Vis/d3/d3.geom.js?2.7.1"></script>
+<script type="text/javascript" src="http://smartb.labo4g.enstb.fr/Vis/d3.v2.min.js"></script>
 
 <div class='lightbox' style="margin-bottom:20px; margin-left:3%; margin-right:3%;">
   <h2>Devices</h2>
