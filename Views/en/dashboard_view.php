@@ -29,11 +29,16 @@ Dashboard related javascripts
 Dashboard HTML
 ------------------------------------------------------------------------------------------->
 <?php if ($session['write']) { ?>
-<div style="width:100%; background-color:#eee; text-align:right; padding:2px;"><button style="margin-right:4px;">Edit</button></div>
+<div id="editbar">
+	<div class="maxwidth">
+		<div class="tab">
+			<a href="#" class="root">Edit</a>
+		</div>
+	</div>
+</div>
 <?php } ?>
-<div style="text-align:center; width:100%;">
+<div style="margin-top: 30px; text-align:center; width:100%;">
 	<div style="width: 960px; margin: 0px auto; padding:0px; text-align:left; margin-bottom:20px; margin-top:5px;">
-		
 
 	<div id="dashboardeditor">
 	</div>
@@ -131,7 +136,7 @@ Dashboard HTML
 			//$( "button").button();
 		
 			// toggle editor style
-			$( "button" ).click(
+			$( ".root" ).click(
 				function() { 
 					element = document.getElementById('dashboardeditor'); 
 									

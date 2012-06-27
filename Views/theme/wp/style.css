@@ -372,6 +372,39 @@ table.catlist th:last-of-type {
   padding: 2px;
 }
 
+#editbar {
+  background: none repeat scroll 0 0 #33a4d9;
+  height: 10px;
+}
+
+#editbar .maxwidth {
+  position: relative;
+  margin: 0 auto;
+  width: 961px;
+}
+
+#editbar .tab {
+  background: none repeat scroll 0 0 #33a4d9;
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 4px 2px -2px rgba(200, 200, 200, 0.7);
+  float: right;
+  font-size: 12px;
+  line-height: 16px;
+  padding: 6px 8px;
+  position: absolute;
+  right: 0;
+  white-space: nowrap;
+}
+
+#editbar .tab a.root {
+    background: none no-repeat scroll 0 0 #33a4d9;
+    text-decoration: none;
+    color: white;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+    font-weight:bold;
+}
+
+
 #layers li:first-of-type {
   font-weight:bold;
 }
