@@ -199,6 +199,7 @@
 		  $xml .= "<time>" . date('H:i') . "</time>\n";
 		  $xml .= "<today>" . icon_to_number($current[0]->icon['data']) . "</today>\n";
 		  $xml .= "<temperature>". sprintf("%02d", $current[0]->temp_c['data']) . "</temperature>\n";
+		  //$xml .= "<humidity>". sprintf("%02d",str_replace(array("Humidity: ", "%"), array("", ""), $current[0]->humidity['data'])) . "</humidity>\n";
 		  $xml .= "<tomorrow>" . icon_to_number($forecast_list[0]->icon['data']) . "</tomorrow >\n";
 		  $xml .= "<low>" . sprintf("%02d", (($forecast_list[0]->low['data']-32)*5/9)) . "</low>\n";
 		  $xml .= "<high>" . sprintf("%02d", (($forecast_list[0]->high['data']-32)*5/9)) . "</high>\n";
