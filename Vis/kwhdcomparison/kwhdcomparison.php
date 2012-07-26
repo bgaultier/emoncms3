@@ -109,7 +109,7 @@
 			d3.select("#container")
 				.append("div")
 				.attr("id", "placeholder")
-				.attr("style", "float : left; height : 526px; width : 300px;");
+				.attr("style", "float : left; height : 526px; width : 280px;");
 				
 			var container1 = container
 				.append("div")
