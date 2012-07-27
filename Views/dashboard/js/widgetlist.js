@@ -13,6 +13,13 @@
       "menu":"Widgets",
       "options":["topfeed","botfeed"]
     },
+    
+    "map": 
+    {
+      "offsetx":-275,"offsety":-290,"width":550,"height":580,
+      "menu":"Widgets",
+      "options":["max","kwhdmax"]
+    },
 
     "paragraph": 
     {

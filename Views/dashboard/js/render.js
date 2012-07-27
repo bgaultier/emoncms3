@@ -47,9 +47,6 @@ function show_dashboard()
 
 function initialize_dashboard()
 {
-
-
-
 }
 
 function onetime()
@@ -148,6 +145,7 @@ function fast_update()
     onetime();
   }
   draw_dials();
+  draw_maps();
   //draw_leds();
   redraw = 0;
 }
@@ -176,8 +174,19 @@ function draw_dials()
  
 }
 
+function draw_maps()
+{
 
-
+  $('.map').each(function(index)
+  {
+    if (firstdraw == 1)
+    {
+      draw_map($(this).attr("max"), $(this).attr("kwhdmax"));
+      firstdraw = 0;
+    }
+  });
+ 
+}
 
 function curve_value(feed,rate)
 {

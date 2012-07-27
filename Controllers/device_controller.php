@@ -8,13 +8,16 @@
     Part of the OpenEnergyMonitor project:
     http://openenergymonitor.org
 
-    DEVICE	CONTROLLER	ACTIONS	ACCESS
-	list				read
+    DEVICE CONTROLLER ACTIONS		ACCESS
+    list							read
     
   */
+
+  // no direct access
+  defined('EMONCMS_EXEC') or die('Restricted access');
+  
   function device_controller()
   {
-    require "Models/feed_model.php";
     require "Models/device_model.php";
     global $session, $action, $format;
 
@@ -28,7 +31,6 @@
     //---------------------------------------------------------------------------------------------------------
     if ($action == 'list' && $session['read'])
     {
-      $feeds = get_user_feeds($session['userid']);
       $devices = get_user_devices($session['userid']);
       $types = get_all_types();
     

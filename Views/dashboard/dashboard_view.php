@@ -2,11 +2,13 @@
 
   <script type="text/javascript" src="<?php echo $path; ?>Includes/flot/jquery.min.js"></script>
   <script type="text/javascript" src="<?php echo $path; ?>Includes/flot/jquery.flot.min.js"></script>
+  <script type="text/javascript" src="<?php echo $path; ?>Includes/lib/d3.js/d3.v2.min.js"></script>
   <script type="text/javascript" src="<?php echo $path; ?>Views/dashboard/js/widgetlist.js"></script>
   <script type="text/javascript" src="<?php echo $path; ?>Views/dashboard/js/render.js"></script>
   <script type="text/javascript" src="<?php echo $path; ?>Views/dashboard/js/widgets/dial.js"></script>
   <script type="text/javascript" src="<?php echo $path; ?>Views/dashboard/js/widgets/led.js"></script>
   <script type="text/javascript" src="<?php echo $path; ?>Views/dashboard/js/widgets/cylinder.js"></script>
+  <script type="text/javascript" src="<?php echo $path; ?>Views/dashboard/js/widgets/map.js"></script>
 
   <div id="page-container" style="height:400px; position:relative;">
     <div id="page"><?php echo $dashboard['content']; ?></div>

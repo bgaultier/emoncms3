@@ -17,9 +17,11 @@ Dashboard related javascripts
 <!--[if IE]><script language="javascript" type="text/javascript" src="<?php echo $path;?>Vis/flot/excanvas.min.js"></script><![endif]-->
 <script type="text/javascript" src="<?php echo $path; ?>Includes/flot/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Includes/flot/jquery.flot.min.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Includes/lib/d3.js/d3.v2.min.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Views/dashboard/js/render.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Views/dashboard/js/widgets/dial.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Views/dashboard/js/widgets/led.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Views/dashboard/js/widgets/map.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Includes/editors/ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Includes/editors/ckeditor/adapters/jquery.js"></script>
 

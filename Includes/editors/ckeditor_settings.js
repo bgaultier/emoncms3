@@ -24,7 +24,7 @@ CKEDITOR.editorConfig = function(config) {
 	{ name: 'colors', items : [ 'TextColor','BGColor' ] },
 	{ name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] },'/',
 	//{ name: 'e3ui', items : [ 'e3menu' ] },
-	{ name: 'e3widgets', items : [ 'e3wc','e3dial','e3graph' ] }
+	{ name: 'e3widgets', items : [ 'e3wc','e3dial','e3map','e3graph' ] }
 	];
 		
 	config.extraPlugins = 'stylesheetparser,e3Save,e3Preview,e3wc,e3dial,e3graph';
@@ -115,6 +115,24 @@ CKEDITOR.editorConfig = function(config) {
 
 			editor.ui.addButton('e3dial', {
 				label : 'Insert dial',
+				command : pluginName,
+				icon: path+'Includes/editors/images/e3dial.png'
+			});
+		}
+	});
+	
+	// insert map
+	CKEDITOR.plugins.add('e3map', {
+		init : function(editor) {
+			var pluginName = 'e3map';
+			
+			// dial dialog
+			CKEDITOR.dialog.add(pluginName, path + 'Includes/editors/dialogs/e3map.js');
+				
+			editor.addCommand(pluginName, new CKEDITOR.dialogCommand(pluginName ) );
+
+			editor.ui.addButton('e3dial', {
+				label : 'Insert map',
 				command : pluginName,
 				icon: path+'Includes/editors/images/e3dial.png'
 			});
