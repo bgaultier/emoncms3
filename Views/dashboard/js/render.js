@@ -82,6 +82,7 @@ function onetime()
   });
 
   reloadiframe = 0;
+  draw_maps();
 }
 
 // update function
@@ -156,7 +157,6 @@ function fast_update()
     onetime();
   }
   draw_dials();
-  draw_maps();
   //draw_leds();
   redraw = 0;
 }
