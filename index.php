@@ -9,24 +9,19 @@
  Part of the OpenEnergyMonitor project:
  http://openenergymonitor.org
 
- Author: Trystan Lea: trystan.lea@googlemail.com
+ Contributors: Trystan Lea: trystan.lea@googlemail.com, Ildefonso Martínez Marchena
  If you have any questions please get in touch, try the forums here:
  http://openenergymonitor.org/emon/forum
  */
 
 define('EMONCMS_EXEC', 1);
 
-// Load the debug library for debug purposes ( http://www.firephp.org/ )
-//require_once('./Includes/debug/FirePHPCore/fb.php'); ob_start();
-$ckeditor = false;	// ckeditor installed
+// Process user settings
+require "Includes/process_settings.php";
 
 require "Includes/core.inc.php";
 
-//error_reporting(E_ALL);
-ini_set('display_errors', 'on');
-error_reporting(E_ALL ^ E_NOTICE);
-
-require_once ("Includes/locale.php");
+require_once "Includes/locale.php";
 
 // Thanks to seanwg for https addition
 $ssl = $_SERVER['HTTPS'];
@@ -40,20 +35,16 @@ $path = dirname("$proto://" . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME']) .
 require "Includes/db.php";
 require "Models/user_model.php";
 require "Models/statistics_model.php";
-$e = db_connect();
 
-if ($e == 2) {
-	echo "no settings.php";
-	die ;
-} else if ($e == 3) {
-	echo "db settings error";
-	die ;
-} else if ($e == 4) {
-	header("Location: setup.php");
+switch(db_connect()) {
+  case 0: break;
+  case 1: break;  
+  case 3: show_dbsettingserror_message(); die ;
+  case 4: header("Location: setup.php"); break;
 }
-
+  
 //---------------------------------------------------------------------------------
-// DECONDE URL ARGUMENT
+// DECODE URL ARGUMENT
 //---------------------------------------------------------------------------------
 $q = preg_replace('/[^.\/a-z0-9]/', '', $_GET['q']);
 // filter out all except a-z / .
@@ -93,7 +84,6 @@ else
   emon_session_start();
   $session = $_SESSION;
 }
-
 
 // Set user language on every page load to avoid apache multithread setlocale error
 set_emoncms_lang($session['userid']);
