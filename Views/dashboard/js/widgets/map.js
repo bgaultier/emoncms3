@@ -7,8 +7,31 @@
     Part of the OpenEnergyMonitor project:
     http://openenergymonitor.org
   */
+  
+  function render_node_information(node) {
+	  var out = '<i style="margin-right : 5px;" class="icon-info-sign"></i><strong>' + escape(node.hostname) + '</strong>  | ';
+	  if(node.kwhd) {
+		  out += '<a href=\"' + path + 'vis/zoom?power=' + node.id + '&kwhd=' + (parseInt(node.id) + 1) + '\" target=\"_blank\">visualisation</a> | ';
+		  out += parseFloat(node.kwhd).toFixed(2) +'kWhd | ';
+	  }
+	    
+	  if(node.ipv4)
+		out += escape(node.ipv4) + ' | ';
+	  if(node.ipv6)
+		out += String(node.ipv6).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') + ' | ';
+	  if(node.comments)
+		out += String(node.comments).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+	  $('#info').each(function(index) {
+		  $(this).hide().html(out).fadeIn();
+	  });
+  }
 
-  function draw_map(max, kwhdmax) {
+  function draw_map(max, kwhdmax, caption_margintop) {
+    // we have to deal with undefined parameters
+    max = typeof max !== 'undefined' ? max : 1000;
+    kwhdmax = typeof kwhdmax !== 'undefined' ? kwhdmax : 5;
+    caption_margintop = typeof caption_margintop !== 'undefined' ? caption_margintop : 470;
+
     // TODO : size of the map has to be dynamic
     var w = 541,
 		h = 524;
@@ -25,7 +48,13 @@
 
 	var vis = d3.select(".map").append("svg")
 		.attr("width", w)
-		.attr("height", h+100);
+		.attr("height", h);
+		
+	var info = d3.select(".map")
+				 .append("div")
+				 .attr("id", "info")
+				 .attr("style", "margin-left : 40px; margin-top : 8px; font-size:12px;")
+				 .html('<i style="margin-right : 5px;" class="icon-circle-arrow-up"></i>Please click on a node for more information');
 		
 	var consumption_max = max;
 	var consumption_per_day_max = kwhdmax;
@@ -41,21 +70,21 @@
 			   .data(power_colors)
 			   .enter().append("rect")
 					   .attr("x", function(d, i) { return i * 20+4; })
-					   .attr("y", 524)
+					   .attr("y", caption_margintop)
 					   .attr("width", 20)
 					   .attr("height", 20)
 					   .style("fill", function(d, i) { return power_colors[i] });
 							
 		caption.append("text")
 			   .attr("x", 0)
-			   .attr("y", 554)
+			   .attr("y", caption_margintop + 30)
 			   .text("0W")
 			   .attr("style", "font: 10px sans-serif;");
 			  
 			  
 		caption.append("text")
 			   .attr("x", 20 * power_colors.length - 12 +"px")
-			   .attr("y", 554)
+			   .attr("y", caption_margintop + 30)
 			   .text(consumption_max + "W")
 			   .attr("style", "font: 10px sans-serif;"); 
 							
@@ -97,21 +126,21 @@
 			   .data(kwhd_colors)
 			   .enter().append("rect")
 					   .attr("x", function(d, i) { return i*20})
-					   .attr("y", 524)
+					   .attr("y", caption_margintop)
 					   .attr("width", 20)
 					   .attr("height", 20)
 					   .style("fill", function(d, i) { return kwhd_colors(i/10); });
 							
 		caption.append("text")
 			   .attr("x", 0)
-			   .attr("y", 554)
+			   .attr("y", caption_margintop + 30)
 			   .text("0kWh")
 			   .attr("style", "font: 10px sans-serif;");
 			  
 			  
 		caption.append("text")
 			   .attr("x", 20 * kwhd_colors.length*10 - 20 +"px")
-			   .attr("y", 554)
+			   .attr("y", caption_margintop + 30)
 			   .text(parseFloat(consumption_per_day_max).toFixed(2)+"kWhd")
 			   .attr("style", "font: 10px sans-serif;"); 
 							

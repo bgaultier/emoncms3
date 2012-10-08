@@ -27,7 +27,7 @@ if (isset($_SESSION['editmode']) && ($_SESSION['editmode'] == TRUE)) {
   <span class="icon-bar"></span>
 </button>*/
 
-  if (isset($_SESSION['editmode']) && ($_SESSION['editmode'] == TRUE)) { echo "<a class='brand' href='#'>Emoncms3</a>"; }
+  if (isset($_SESSION['editmode']) && ($_SESSION['editmode'] == TRUE)) { echo "<a class='brand' href='#'>SmarTB</a>"; }
 ?>
   <ul class="nav">
     <li><a style="padding:5px;" href="<?php echo $GLOBALS['path'] . $viewl; ?>"><img id="emoncms-logo" src="<?php echo $logo; ?>" /></a></li>

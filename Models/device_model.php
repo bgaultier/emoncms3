@@ -8,6 +8,9 @@
     Part of the OpenEnergyMonitor project:
     http://openenergymonitor.org
   */
+
+  // no direct access
+  defined('EMONCMS_EXEC') or die('Restricted access');
   
   //id 	hostname 	x 	y 	userid 	comments 	ipv4_addr 	ipv6_addr 	typeid
   function add_device($hostname, $x, $y, $userid, $comments, $ipv4_addr, $ipv6_addr, $typeid)
@@ -72,7 +75,7 @@
   
   function get_user_devices($userid)
   {
-        $result = db_query("SELECT * FROM devices WHERE userid = '$userid'");
+        $result = db_query("SELECT * FROM devices WHERE userid = '$userid' ORDER BY id ASC");
         $devices = array();
         if ($result)
         {
